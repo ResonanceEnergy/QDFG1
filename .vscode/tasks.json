@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "(info) Build in Xcode",
+      "type": "shell",
+      "command": "echo 'Open the Xcode project/workspace to build/run on iPhone.'",
+      "problemMatcher": []
+    }
+  ]
+}

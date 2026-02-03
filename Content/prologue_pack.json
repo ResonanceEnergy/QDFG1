@@ -1,0 +1,1310 @@
+{
+  "packId": "prologue_v1",
+  "version": "1.0.0",
+  "title": "Prologue: The First Deed",
+  "definitions": {
+    "classes": [
+      {
+        "id": "VANGUARD",
+        "displayName": "Vanguard"
+      },
+      {
+        "id": "ARCANIST",
+        "displayName": "Arcanist"
+      },
+      {
+        "id": "SHADE",
+        "displayName": "Shade"
+      }
+    ],
+    "stats": [
+      "Body",
+      "Mind",
+      "Edge"
+    ],
+    "skills": [
+      "Force",
+      "Insight",
+      "Stealth",
+      "Charm",
+      "Warding"
+    ],
+    "timeModel": {
+      "ticksPerPhase": 6,
+      "phases": [
+        "Dawn",
+        "Day",
+        "Dusk",
+        "Night"
+      ]
+    }
+  },
+  "startSceneId": "S001_ROAD_IN",
+  "scenes": [
+    {
+      "id": "S001_ROAD_IN",
+      "title": "The Road In",
+      "text": "You arrive at a frontier settlement as dusk approaches. Smoke rises from chimneys\u2014and from somewhere deeper within.",
+      "onEnter": [
+        {
+          "type": "log",
+          "text": "You reach a settlement at dusk."
+        }
+      ],
+      "choices": [
+        {
+          "id": "C001_ENTER",
+          "text": "Enter the settlement.",
+          "effects": [
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            }
+          ],
+          "to": "S002_SQUARE"
+        },
+        {
+          "id": "C002_OBSERVE",
+          "text": "Wait and observe from the road.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Insight",
+            "difficulty": 40,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "phaseIs",
+                  "phase": "Night"
+                },
+                "add": -10
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 2
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "LEARNED_SMOKE_SOURCE"
+                  },
+                  {
+                    "type": "log",
+                    "text": "You notice smoke from a damaged storehouse roof."
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  }
+                ],
+                "to": "S002_SQUARE"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You sense trouble, but details escape you."
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  }
+                ],
+                "to": "S002_SQUARE"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "modifyFatigue",
+                    "amount": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You waste time watching shadows. Nothing becomes clearer."
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 2
+                  }
+                ],
+                "to": "S002_SQUARE"
+              }
+            }
+          }
+        },
+        {
+          "id": "C003_LEAVE",
+          "text": "Turn back down the road.",
+          "effects": [
+            {
+              "type": "log",
+              "text": "You walk away. The settlement remains behind you."
+            }
+          ],
+          "to": "S001_ROAD_IN"
+        }
+      ]
+    },
+    {
+      "id": "S002_SQUARE",
+      "title": "Settlement Square",
+      "text": "The square is small, busy, and tense. A notice board stands near a worried local. A storehouse shows fresh damage. A path leads toward nearby ruins.",
+      "choices": [
+        {
+          "id": "C010_TALK_LOCAL",
+          "text": "Speak to the worried local.",
+          "effects": [
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            }
+          ],
+          "to": "S003_WORRIED_LOCAL"
+        },
+        {
+          "id": "C011_INSPECT_STOREHOUSE",
+          "text": "Inspect the storehouse damage.",
+          "effects": [
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            }
+          ],
+          "to": "S004_STOREHOUSE"
+        },
+        {
+          "id": "C012_DECIDE",
+          "text": "Consider your next move.",
+          "to": "S006_DECIDE"
+        }
+      ]
+    },
+    {
+      "id": "S003_WORRIED_LOCAL",
+      "title": "A Worried Local",
+      "text": "\"Something was taken,\" the local says. \"From the storehouse. Whoever did it ran toward the ruins. No one wants to go after dark.\"",
+      "onEnter": [
+        {
+          "type": "addFlag",
+          "flag": "HEARD_THEFT"
+        }
+      ],
+      "choices": [
+        {
+          "id": "C020_ASK_MORE",
+          "text": "Ask what was taken.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Charm",
+            "difficulty": 35,
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Charm",
+                    "amount": 2
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "KNOW_ITEM_IMPORTANT"
+                  },
+                  {
+                    "type": "log",
+                    "text": "You learn the item is vital to the settlement\u2019s safety."
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  }
+                ],
+                "to": "S006_DECIDE"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Charm",
+                    "amount": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You learn it matters, but not why."
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  }
+                ],
+                "to": "S006_DECIDE"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "The local shuts down. Fear wins."
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  }
+                ],
+                "to": "S006_DECIDE"
+              }
+            }
+          }
+        },
+        {
+          "id": "C021_RETURN",
+          "text": "Return to the square.",
+          "to": "S002_SQUARE"
+        }
+      ]
+    },
+    {
+      "id": "S004_STOREHOUSE",
+      "title": "The Storehouse",
+      "text": "A scorched mark stains the doorframe. The lock was forced or bypassed\u2014cleanly. Tracks lead away toward the ruins path.",
+      "choices": [
+        {
+          "id": "C030_STUDY_MARKS",
+          "text": "Study the scorch and entry method.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Insight",
+            "difficulty": 45,
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 2
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "LEARNED_ENTRY_STYLE"
+                  },
+                  {
+                    "type": "log",
+                    "text": "You recognize a deliberate method\u2014not random vandalism."
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  }
+                ],
+                "to": "S006_DECIDE"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You find clues, but they don't form a full picture."
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  }
+                ],
+                "to": "S006_DECIDE"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "modifyFatigue",
+                    "amount": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You linger too long and learn little."
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 2
+                  }
+                ],
+                "to": "S006_DECIDE"
+              }
+            }
+          }
+        },
+        {
+          "id": "C031_RETURN",
+          "text": "Return to the square.",
+          "to": "S002_SQUARE"
+        }
+      ]
+    },
+    {
+      "id": "S006_DECIDE",
+      "title": "Before Night Falls",
+      "text": "The settlement\u2019s tension presses in. Night is coming. If you act, you act on your own terms.",
+      "choices": [
+        {
+          "id": "C050_GO_NOW",
+          "text": "Go now toward the ruins.",
+          "effects": [
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            }
+          ],
+          "to": "S007_APPROACH_SELECT"
+        },
+        {
+          "id": "C051_PREPARE",
+          "text": "Prepare for the attempt.",
+          "effects": [
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            },
+            {
+              "type": "modifyFatigue",
+              "amount": -1
+            },
+            {
+              "type": "addFlag",
+              "flag": "PREPARED_BASIC"
+            },
+            {
+              "type": "log",
+              "text": "You steady yourself and gather essentials."
+            }
+          ],
+          "to": "S006_DECIDE"
+        },
+        {
+          "id": "C052_WAIT_MORNING",
+          "text": "Wait until morning.",
+          "effects": [
+            {
+              "type": "advanceTime",
+              "ticks": 6
+            },
+            {
+              "type": "modifyFatigue",
+              "amount": -2
+            },
+            {
+              "type": "addFlag",
+              "flag": "WAITED_UNTIL_MORNING"
+            },
+            {
+              "type": "log",
+              "text": "Morning comes. Whatever happened during the night, happened."
+            }
+          ],
+          "to": "S007_APPROACH_SELECT"
+        }
+      ]
+    },
+    {
+      "id": "S007_APPROACH_SELECT",
+      "title": "Choose Your Approach",
+      "text": "The ruins await. How do you proceed?",
+      "choices": [
+        {
+          "id": "C060_OBSERVE",
+          "text": "Observe the approach and look for a safe route.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Insight",
+            "difficulty": 45,
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 2
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "FOUND_SAFE_ROUTE"
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You identify a safer route through collapsed stone."
+                  }
+                ],
+                "to": "S008_RUINS_ENTRY"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 1
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You find a route, but it feels uncertain."
+                  }
+                ],
+                "to": "S008_RUINS_ENTRY"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "advanceTime",
+                    "ticks": 2
+                  },
+                  {
+                    "type": "modifyFatigue",
+                    "amount": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You lose time circling rubble."
+                  }
+                ],
+                "to": "S008_RUINS_ENTRY"
+              }
+            }
+          }
+        },
+        {
+          "id": "C061_VANGUARD_FORCE",
+          "text": "[Vanguard] Follow the trail and confront whoever took it.",
+          "requires": [
+            {
+              "type": "classIs",
+              "classId": "VANGUARD"
+            }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Force",
+            "difficulty": 50,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "hasFlag",
+                  "flag": "PREPARED_BASIC"
+                },
+                "add": 5
+              },
+              {
+                "if": {
+                  "type": "phaseIs",
+                  "phase": "Night"
+                },
+                "add": -5
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Force",
+                    "amount": 2
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "CONFRONTED_THIEF"
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You push forward decisively and seize the initiative."
+                  }
+                ],
+                "to": "S009_CONFRONTATION"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Force",
+                    "amount": 1
+                  },
+                  {
+                    "type": "modifyHealth",
+                    "amount": -1
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You gain ground, but you take a hit in the struggle."
+                  }
+                ],
+                "to": "S009_CONFRONTATION"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "modifyHealth",
+                    "amount": -2
+                  },
+                  {
+                    "type": "modifyFatigue",
+                    "amount": 2
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "HURT_AND_WITHDRAWN"
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 2
+                  },
+                  {
+                    "type": "log",
+                    "text": "You are forced back. You live\u2014but you\u2019ll need a new angle."
+                  }
+                ],
+                "to": "S012_REGROUP"
+              }
+            }
+          }
+        },
+        {
+          "id": "C062_ARCANIST_WARDING",
+          "text": "[Arcanist] Disrupt the ward patterns around the entrance.",
+          "requires": [
+            {
+              "type": "classIs",
+              "classId": "ARCANIST"
+            }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Warding",
+            "difficulty": 50,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "hasFlag",
+                  "flag": "LEARNED_ENTRY_STYLE"
+                },
+                "add": 5
+              },
+              {
+                "if": {
+                  "type": "phaseIs",
+                  "phase": "Night"
+                },
+                "add": -5
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Warding",
+                    "amount": 2
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "DISRUPTED_WARDS"
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You quiet the interference and slip past the worst of it."
+                  }
+                ],
+                "to": "S008_RUINS_ENTRY"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Warding",
+                    "amount": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "LEFT_TRACE"
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You succeed, but your method leaves a trace."
+                  }
+                ],
+                "to": "S008_RUINS_ENTRY"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "modifyFatigue",
+                    "amount": 2
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "BACKLASH"
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 2
+                  },
+                  {
+                    "type": "log",
+                    "text": "The pattern bites back. You retreat, shaken but intact."
+                  }
+                ],
+                "to": "S012_REGROUP"
+              }
+            }
+          }
+        },
+        {
+          "id": "C063_SHADE_SNEAK",
+          "text": "[Shade] Slip in quietly and avoid being seen.",
+          "requires": [
+            {
+              "type": "classIs",
+              "classId": "SHADE"
+            }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Stealth",
+            "difficulty": 50,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "hasFlag",
+                  "flag": "FOUND_SAFE_ROUTE"
+                },
+                "add": 5
+              },
+              {
+                "if": {
+                  "type": "phaseIs",
+                  "phase": "Night"
+                },
+                "add": 5
+              },
+              {
+                "if": {
+                  "type": "hasFlag",
+                  "flag": "HURT_AND_WITHDRAWN"
+                },
+                "add": -10
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Stealth",
+                    "amount": 2
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "ENTERED_UNSEEN"
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You move like a shadow between broken stone."
+                  }
+                ],
+                "to": "S010_INSIDE"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Stealth",
+                    "amount": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "NEARLY_SPOTTED"
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You get in\u2014but someone almost notices."
+                  }
+                ],
+                "to": "S010_INSIDE"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "modifyHealth",
+                    "amount": -1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "SPOTTED"
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You\u2019re seen. You slip deeper as the ruins grow alert."
+                  }
+                ],
+                "to": "S011_ALERTED"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S008_RUINS_ENTRY",
+      "title": "Ruins Entrance",
+      "text": "Cold air spills from a broken archway. One route is direct and exposed; another is narrow and unstable.",
+      "choices": [
+        {
+          "id": "C070_DIRECT",
+          "text": "Take the direct route.",
+          "effects": [
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            }
+          ],
+          "to": "S009_CONFRONTATION"
+        },
+        {
+          "id": "C071_NARROW",
+          "text": "Take the narrow route.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Edge",
+            "difficulty": 45,
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "addFlag",
+                    "flag": "TOOK_NARROW_ROUTE"
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You slip through the unstable passage safely."
+                  }
+                ],
+                "to": "S010_INSIDE"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "modifyHealth",
+                    "amount": -1
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You make it, but stone scrapes you hard."
+                  }
+                ],
+                "to": "S010_INSIDE"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "modifyHealth",
+                    "amount": -2
+                  },
+                  {
+                    "type": "modifyFatigue",
+                    "amount": 2
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 2
+                  },
+                  {
+                    "type": "log",
+                    "text": "The passage collapses. You crawl out bruised."
+                  }
+                ],
+                "to": "S012_REGROUP"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S010_INSIDE",
+      "title": "Inside the Ruins",
+      "text": "Dust. Broken stone. The sound of hurried movement deeper within. You are close.",
+      "choices": [
+        {
+          "id": "C090_ADVANCE",
+          "text": "Advance carefully.",
+          "effects": [
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            }
+          ],
+          "to": "S009_CONFRONTATION"
+        }
+      ]
+    },
+    {
+      "id": "S011_ALERTED",
+      "title": "The Ruins Are Alert",
+      "text": "A sharp whistle\u2014signal, not panic. Someone is coordinating. You must adapt.",
+      "choices": [
+        {
+          "id": "C100_HIDE",
+          "text": "Hide and wait for a gap.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Stealth",
+            "difficulty": 55,
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Stealth",
+                    "amount": 2
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "RECOVERED_AFTER_ALERT"
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You regain control and move when they least expect it."
+                  }
+                ],
+                "to": "S009_CONFRONTATION"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Stealth",
+                    "amount": 1
+                  },
+                  {
+                    "type": "modifyFatigue",
+                    "amount": 1
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You stay hidden, but it costs time and calm."
+                  }
+                ],
+                "to": "S009_CONFRONTATION"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "modifyHealth",
+                    "amount": -1
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You\u2019re flushed out. You retreat before it gets worse."
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "MARKED"
+                  }
+                ],
+                "to": "S012_REGROUP"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S009_CONFRONTATION",
+      "title": "A Figure in the Rubble",
+      "text": "A figure handles a wrapped object. They tense when they notice you. Words could still matter.",
+      "choices": [
+        {
+          "id": "C080_TALK",
+          "text": "Try to talk them down.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Charm",
+            "difficulty": 45,
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Charm",
+                    "amount": 2
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "TALKED_DOWN"
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "They hesitate. You gain a moment of control."
+                  }
+                ],
+                "to": "S013_RECOVER"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Charm",
+                    "amount": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "PARTIAL_TRUST"
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "They listen\u2014barely. Your next move matters."
+                  }
+                ],
+                "to": "S013_RECOVER"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "addFlag",
+                    "flag": "ESCALATED"
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "Your words fail. The tension spikes."
+                  }
+                ],
+                "to": "S012_REGROUP"
+              }
+            }
+          }
+        },
+        {
+          "id": "C081_GRAB",
+          "text": "Move to seize the wrapped object.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Force",
+            "difficulty": 55,
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Force",
+                    "amount": 2
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You wrench it free."
+                  }
+                ],
+                "to": "S013_RECOVER"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Force",
+                    "amount": 1
+                  },
+                  {
+                    "type": "modifyHealth",
+                    "amount": -1
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You get it, but you\u2019re clipped in the struggle."
+                  }
+                ],
+                "to": "S013_RECOVER"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "modifyHealth",
+                    "amount": -2
+                  },
+                  {
+                    "type": "modifyFatigue",
+                    "amount": 2
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You fail to secure it and pay for the attempt."
+                  }
+                ],
+                "to": "S012_REGROUP"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S012_REGROUP",
+      "title": "Regroup",
+      "text": "You pull back to reassess. You\u2019re not finished\u2014just forced to change tactics.",
+      "choices": [
+        {
+          "id": "C110_RETURN_AND_TRY",
+          "text": "Try again with a different approach.",
+          "effects": [
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            }
+          ],
+          "to": "S007_APPROACH_SELECT"
+        },
+        {
+          "id": "C111_GO_BACK_EMPTY",
+          "text": "Return with what you\u2019ve learned.",
+          "effects": [
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            }
+          ],
+          "to": "S016_RETURN_WITH_TRUTH"
+        }
+      ]
+    },
+    {
+      "id": "S013_RECOVER",
+      "title": "The Wrapped Object",
+      "text": "You have the wrapped object in hand. Its weight feels wrong\u2014like it contains more than one thing.",
+      "choices": [
+        {
+          "id": "C121_RETURN_UNOPENED",
+          "text": "Return it unopened.",
+          "effects": [
+            {
+              "type": "addFlag",
+              "flag": "RETURNED_UNOPENED"
+            },
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            }
+          ],
+          "to": "S015_RETURN_WITH_ITEM"
+        },
+        {
+          "id": "C120_OPEN",
+          "text": "Open it now.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Insight",
+            "difficulty": 45,
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 2
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "DISCOVERED_TWIST"
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You discover a clue that changes what you thought this was."
+                  }
+                ],
+                "to": "S015_RETURN_WITH_ITEM"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 1
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You learn something\u2014just not enough."
+                  }
+                ],
+                "to": "S015_RETURN_WITH_ITEM"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You decide not to risk damage."
+                  }
+                ],
+                "to": "S015_RETURN_WITH_ITEM"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S015_RETURN_WITH_ITEM",
+      "title": "Return with the Item",
+      "text": "You return with the recovered object. Faces turn toward you\u2014hope mixed with fear.",
+      "onEnter": [
+        {
+          "type": "addFlag",
+          "flag": "PROLOGUE_ITEM_RECOVERED"
+        },
+        {
+          "type": "log",
+          "text": "You returned with the recovered object."
+        }
+      ],
+      "choices": [
+        {
+          "id": "C140_END",
+          "text": "Continue.",
+          "to": "S018_PROLOGUE_END"
+        }
+      ]
+    },
+    {
+      "id": "S016_RETURN_WITH_TRUTH",
+      "title": "Return with the Truth",
+      "text": "You return without the item\u2014but with information. The settlement listens more closely than you expected.",
+      "onEnter": [
+        {
+          "type": "addFlag",
+          "flag": "PROLOGUE_TRUTH_LEARNED"
+        },
+        {
+          "type": "log",
+          "text": "You returned with information that changes the situation."
+        }
+      ],
+      "choices": [
+        {
+          "id": "C150_END",
+          "text": "Continue.",
+          "to": "S018_PROLOGUE_END"
+        }
+      ]
+    },
+    {
+      "id": "S018_PROLOGUE_END",
+      "title": "The First Deed",
+      "text": "You are not celebrated. Not yet. But the settlement now knows your name\u2014and the world has begun to answer back.",
+      "choices": [
+        {
+          "id": "C160_CONTINUE",
+          "text": "Return to the square.",
+          "effects": [
+            {
+              "type": "log",
+              "text": "Prologue complete."
+            }
+          ],
+          "to": "S002_SQUARE"
+        }
+      ]
+    }
+  ]
+}

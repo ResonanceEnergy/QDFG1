@@ -1,0 +1,10 @@
+{
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "editor.formatOnSave": false,
+  "editor.rulers": [
+    100
+  ],
+  "swift.swiftEnvironmentVariables": {},
+  "swift.path": ""
+}
