@@ -11,10 +11,11 @@ final class StoryViewModel: ObservableObject {
     init(pack: StoryPack) {
         self.pack = pack
 
-        if let saved = Storage.loadState(), pack.sceneById[saved.currentSceneId] != nil {
+        if let saved = (try? Storage.loadSavedState()).flatMap({ $0.packId == pack.packId ? $0 : nil }) {
             self.state = saved
         } else {
             self.state = GameState(
+                packId: pack.packId,
                 currentSceneId: pack.startSceneId,
                 heroClassId: "VANGUARD",
                 stats: ["Body": 50, "Mind": 50, "Edge": 50],
@@ -38,7 +39,7 @@ final class StoryViewModel: ObservableObject {
 
     func setClass(_ classId: String) {
         ClassDefaults.apply(classId: classId, to: &state)
-        Storage.saveState(state)
+        try? Storage.save(state: state)
     }
 
     func choose(_ choice: Choice) {
@@ -49,6 +50,6 @@ final class StoryViewModel: ObservableObject {
     }
 
     func reset() {
-        Storage.clearSave()
+        Storage.clearSave(packId: pack.packId)
     }
 }

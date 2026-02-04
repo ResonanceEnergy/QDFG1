@@ -25,8 +25,12 @@ enum ConditionEvaluator {
         switch wrapper.type {
         case "hasFlag":
             return wrapper.flag.map { state.flags.contains($0) } ?? false
+        case "notFlag":
+            return wrapper.flag.map { !state.flags.contains($0) } ?? false
         case "phaseIs":
             return wrapper.phase.map { state.phase(using: pack.definitions.timeModel) == $0 } ?? false
+        case "classIs":
+            return wrapper.classId.map { state.heroClassId == $0 } ?? false
         default:
             return false
         }
@@ -36,10 +40,10 @@ enum ConditionEvaluator {
 enum EffectApplier {
     static func apply(_ effect: Effect, state: inout GameState) {
         switch effect {
-        case .addFlag(let f): state.flags.insert(f)
+        case .setFlag(let f): state.flags.insert(f)
         case .removeFlag(let f): state.flags.remove(f)
         case .modifyHealth(let a): state.health += a
-        case .modifyFatigue(let a): state.fatigue += a
+        case .fatigue(let d): state.fatigue += d
         case .practiceSkill(let skill, let amount): state.skills[skill, default: 0] += amount
         case .advanceTime(let ticks): state.timeTick += ticks
         case .log(let text): state.log.append(text)

@@ -1,0 +1,1217 @@
+{
+  "packId": "ch1_wilderness_pack",
+  "version": "1.0.0",
+  "title": "Chapter 1 Wilderness",
+  "startScene": "",
+  "definitions": {
+    "classes": [
+      {
+        "id": "VANGUARD",
+        "displayName": "Vanguard"
+      },
+      {
+        "id": "ARCANIST",
+        "displayName": "Arcanist"
+      },
+      {
+        "id": "SHADE",
+        "displayName": "Shade"
+      }
+    ],
+    "stats": [
+      "Body",
+      "Mind",
+      "Edge"
+    ],
+    "skills": [
+      "Force",
+      "Insight",
+      "Stealth",
+      "Charm",
+      "Warding"
+    ],
+    "timeModel": {
+      "ticksPerPhase": 6,
+      "phases": [
+        "Dawn",
+        "Day",
+        "Dusk",
+        "Night"
+      ]
+    }
+  },
+  "scenes": [
+    {
+      "id": "S008_WILD",
+      "title": "Wilderness Path",
+      "text": "The path leads into untamed wilderness.",
+      "onEnter": [
+        {
+          "type": "log",
+          "text": "You venture into the wilds."
+        }
+      ],
+      "choices": [
+        {
+          "id": "C801_EXPLORE",
+          "text": "Scout ahead.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Insight",
+            "difficulty": 40,
+            "modifiers": [
+              {
+                "if": { "type": "hasFlag", "flag": "HUB_WARDED" },
+                "add": 10
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 2
+                  },
+                  {
+                    "type": "setFlag",
+                    "flag": "WILD_PATH_FOUND"
+                  },
+                  {
+                    "type": "log",
+                    "text": "You discover a hidden trail."
+                  }
+                ],
+                "to": "hub_square_return_router"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You find your way back with minor scratches."
+                  }
+                ],
+                "to": "hub_square_return_router"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "fatigue",
+                    "delta": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You get lost and return exhausted."
+                  }
+                ],
+                "to": "hub_square_return_router"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "wilderness_exit",
+      "title": "Outer Trail",
+      "text": "Beyond the last stone marker, the land loosens into scrub and wind. Paths braid and unbraid between low ridges.",
+      "choices": [
+        {
+          "text": "Follow the marked cut and show your permit.",
+          "requires": [
+            { "type": "hasFlag", "flag": "HUB_PERMIT" }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 1 },
+                  { "type": "log", "text": "You keep to the posted line. The marker accepts your seal without drama." }
+                ],
+                "to": "wild_obstacle1_permit"
+              }
+            }
+          }
+        },
+        {
+          "text": "Take the ridge-cut path into thicker scrub.",
+          "requires": [
+            { "type": "hasFlag", "flag": "HUB_WARDED" },
+            { "type": "notFlag", "flag": "HUB_PERMIT" }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 1 },
+                  { "type": "log", "text": "The air feels steadier around you, like a quiet hand on the shoulder." }
+                ],
+                "to": "wild_obstacle1_warded"
+              }
+            }
+          }
+        },
+        {
+          "text": "Take the ridge-cut path into thicker scrub.",
+          "requires": [
+            { "type": "notFlag", "flag": "HUB_WARDED" },
+            { "type": "notFlag", "flag": "HUB_PERMIT" }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 1 },
+                  { "type": "log", "text": "Loose stones and stubborn brush. Nothing welcomes you out here." }
+                ],
+                "to": "wild_obstacle1_unwarded"
+              }
+            }
+          }
+        },
+        {
+          "text": "Scout ahead along the outer trail.",
+          "requires": [
+            { "type": "hasFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+            { "type": "notFlag", "flag": "WILD_OB2_HEAT_SPENT" }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Insight",
+            "difficulty": 45,
+            "modifiers": [],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 1 },
+                  { "type": "practiceSkill", "skill": "Insight", "amount": 1 },
+                  { "type": "log", "text": "You notice the signs you left behind. The land feels less empty than it should." }
+                ],
+                "to": "wild_obstacle2_intro"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 2 },
+                  { "type": "practiceSkill", "skill": "Insight", "amount": 1 },
+                  { "type": "log", "text": "The scrub holds onto your passage like a story it wants to retell." }
+                ],
+                "to": "wild_obstacle2_intro"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 2 },
+                  { "type": "practiceSkill", "skill": "Insight", "amount": 1 },
+                  { "type": "log", "text": "You miss what matters until it's already behind you. Something out there adjusts." }
+                ],
+                "to": "wild_obstacle2_intro"
+              }
+            }
+          }
+        },
+        {
+          "text": "Sense a growing danger in the wilds.",
+          "requires": [
+            { "type": "hasFlag", "flag": "WILD_DANGER_MARK_1" },
+            { "type": "notFlag", "flag": "WILD_DANGER_ESCALATION_1_SPENT" }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_DANGER_1" },
+                  { "type": "setFlag", "flag": "WILD_DANGER_ESCALATION_1_SPENT" },
+                  { "type": "log", "text": "The wilderness stops feeling indifferent. Small things move with purpose now." }
+                ],
+                "to": "wilderness_exit"
+              }
+            }
+          }
+        },
+        {
+          "text": "Head toward the next stretch of road.",
+          "outcomes": [
+            {
+              "text": [
+                "You set your pace and let the day pull you forward.",
+                "The world ahead feels ordinary—until it starts repeating itself."
+              ],
+              "effects": [
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "log", "message": "Leaving Chapter 1 space." }
+              ],
+              "to": "ch1_to_ch2_bridge"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wild_obstacle2_intro",
+      "title": "Moving Eyes",
+      "text": "A sound carries wrong through the scrub—metal on leather, voices that don't belong to the wind. Something is sweeping the trail behind you.",
+      "choices": [
+        {
+          "text": "Slip into the scrub and let the sweep pass by.",
+          "requires": [
+            { "type": "notFlag", "flag": "HUB_WATCHLIST" }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Stealth",
+            "difficulty": 52,
+            "modifiers": [],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 2 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You become part of the brush. The voices move on, arguing quietly about shadows." }
+                ],
+                "to": "wild_obstacle2_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "setFlag", "flag": "WILD_OB2_NOTED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "A branch snaps under your heel. The sweep hesitates—then continues, a little more awake than before." }
+                ],
+                "to": "wild_obstacle2_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "setFlag", "flag": "WILD_OB2_NOTED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 4 },
+                  { "type": "modifyHealth", "delta": -1 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You move at the wrong moment. A shout cuts the air—then the scrub swallows you anyway, leaving you scraped and breathing hard." }
+                ],
+                "to": "wild_obstacle2_after"
+              }
+            }
+          }
+        },
+
+        {
+          "text": "Slip into the scrub—fast, before the sweep closes in.",
+          "requires": [
+            { "type": "hasFlag", "flag": "HUB_WATCHLIST" },
+            { "type": "notFlag", "flag": "HUB_PATROLS_ESCALATION_SPENT" }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Stealth",
+            "difficulty": 60,
+            "modifiers": [],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You vanish at the edge of their attention. Whoever's leading the sweep doesn't get the satisfaction of certainty." }
+                ],
+                "to": "wild_obstacle2_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "setFlag", "flag": "WILD_OB2_NOTED" },
+                  { "type": "setFlag", "flag": "HUB_PATROLS_TIGHTENED" },
+                  { "type": "setFlag", "flag": "HUB_PATROLS_ESCALATION_SPENT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 4 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You escape, but you feel it—the sweep learns something about your habits." }
+                ],
+                "to": "wild_obstacle2_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "setFlag", "flag": "WILD_OB2_NOTED" },
+                  { "type": "setFlag", "flag": "HUB_PATROLS_TIGHTENED" },
+                  { "type": "setFlag", "flag": "HUB_PATROLS_ESCALATION_SPENT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 4 },
+                  { "type": "modifyHealth", "delta": -2 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You take a hit of panic and pay for it in noise. You still get away—but the sweep won't be as lazy next time." }
+                ],
+                "to": "wild_obstacle2_after"
+              }
+            }
+          }
+        },
+
+        {
+          "text": "Slip into the scrub—fast, before the sweep closes in.",
+          "requires": [
+            { "type": "hasFlag", "flag": "HUB_WATCHLIST" },
+            { "type": "hasFlag", "flag": "HUB_PATROLS_ESCALATION_SPENT" }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Stealth",
+            "difficulty": 60,
+            "modifiers": [],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You vanish into the brush and let the sweep exhaust itself on empty space." }
+                ],
+                "to": "wild_obstacle2_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "setFlag", "flag": "WILD_OB2_NOTED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 4 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You get away with it, but the sweep feels sharper than it used to." }
+                ],
+                "to": "wild_obstacle2_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "setFlag", "flag": "WILD_OB2_NOTED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 4 },
+                  { "type": "modifyHealth", "delta": -2 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You spill into the brush and keep moving. You still lose them—just not cleanly." }
+                ],
+                "to": "wild_obstacle2_after"
+              }
+            }
+          }
+        },
+
+        {
+          "text": "Step into view like you belong here.",
+          "requires": [
+            { "type": "hasFlag", "flag": "HUB_PERMIT" }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 1 },
+                  { "type": "log", "text": "A seal shown at the right moment turns questions into nods. The sweep redirects its interest elsewhere." }
+                ],
+                "to": "wild_obstacle2_after"
+              }
+            }
+          }
+        },
+
+        {
+          "text": "Step into view and talk your way through the questions.",
+          "requires": [
+            { "type": "notFlag", "flag": "HUB_PERMIT" },
+            { "type": "notFlag", "flag": "HUB_PATROLS_ESCALATION_SPENT" }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Charm",
+            "difficulty": 55,
+            "modifiers": [],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 2 },
+                  { "type": "practiceSkill", "skill": "Charm", "amount": 1 },
+                  { "type": "log", "text": "You give them a story that fits the day. They accept it because it's easier than chasing ghosts." }
+                ],
+                "to": "wild_obstacle2_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "setFlag", "flag": "HUB_WATCHLIST" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "practiceSkill", "skill": "Charm", "amount": 1 },
+                  { "type": "log", "text": "They let you pass, but you can feel the weight of being remembered." }
+                ],
+                "to": "wild_obstacle2_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "setFlag", "flag": "HUB_WATCHLIST" },
+                  { "type": "setFlag", "flag": "HUB_PATROLS_TIGHTENED" },
+                  { "type": "setFlag", "flag": "HUB_PATROLS_ESCALATION_SPENT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "modifyHealth", "delta": -1 },
+                  { "type": "practiceSkill", "skill": "Charm", "amount": 1 },
+                  { "type": "log", "text": "Your story frays. You're waved on anyway—roughly—and the sweep suddenly feels personal." }
+                ],
+                "to": "wild_obstacle2_after"
+              }
+            }
+          }
+        },
+
+        {
+          "text": "Step into view and talk your way through the questions.",
+          "requires": [
+            { "type": "notFlag", "flag": "HUB_PERMIT" },
+            { "type": "hasFlag", "flag": "HUB_PATROLS_ESCALATION_SPENT" }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Charm",
+            "difficulty": 55,
+            "modifiers": [],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 2 },
+                  { "type": "practiceSkill", "skill": "Charm", "amount": 1 },
+                  { "type": "log", "text": "You keep your tone easy. The sweep doesn't like you, but it has no clean reason to stop you." }
+                ],
+                "to": "wild_obstacle2_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "setFlag", "flag": "HUB_WATCHLIST" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "practiceSkill", "skill": "Charm", "amount": 1 },
+                  { "type": "log", "text": "They let you go, but you can feel their eyes measuring your back as you leave." }
+                ],
+                "to": "wild_obstacle2_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+                  { "type": "setFlag", "flag": "WILD_OB2_DONE" },
+                  { "type": "setFlag", "flag": "HUB_WATCHLIST" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "modifyHealth", "delta": -1 },
+                  { "type": "practiceSkill", "skill": "Charm", "amount": 1 },
+                  { "type": "log", "text": "You take a rough shove and a hard look. You're not stopped—just reminded." }
+                ],
+                "to": "wild_obstacle2_after"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "wild_obstacle2_after",
+      "title": "Past the Watcher",
+      "text": "The watcher is gone, but their presence lingers in the air. The trail continues, but feels different now.",
+      "choices": [
+        {
+          "text": "Continue deeper into the wilderness.",
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "advanceTime", "ticks": 2 },
+                  { "type": "fatigue", "delta": 1 },
+                  { "type": "log", "text": "You press on, keeping your path imperfect on purpose." }
+                ],
+                "to": "wilderness_exit"
+              }
+            }
+          }
+        },
+        {
+          "text": "Turn back toward town.",
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "log", "text": "You decide the wilderness has tested you enough for now." }
+                ],
+                "to": "hub_square_return_router"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "wild_obstacle1_permit",
+      "title": "Ridge Marker",
+      "text": "A weathered post stands where the ridge pinches tight. A faded seal is carved deep enough to outlast opinions.",
+      "choices": [
+        {
+          "text": "Continue through without lingering.",
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 1 },
+                  { "type": "log", "text": "You pass cleanly. The ridge keeps its silence." }
+                ],
+                "to": "wild_obstacle1_after"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "wild_obstacle1_warded",
+      "title": "Stone-Snare",
+      "text": "Loose rock waits under thin scrub. The slope remembers old slides—and seems ready to rehearse one.",
+      "choices": [
+        {
+          "text": "Brace and drive through the shifting stones.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Force",
+            "difficulty": 50,
+            "modifiers": [],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 2 },
+                  { "type": "practiceSkill", "skill": "Force", "amount": 1 },
+                  { "type": "log", "text": "You bully the slope into letting you pass." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "modifyHealth", "delta": -1 },
+                  { "type": "practiceSkill", "skill": "Force", "amount": 1 },
+                  { "type": "log", "text": "The stones bite, and the noise travels. You still make it through." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_TROUBLE" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "modifyHealth", "delta": -1 },
+                  { "type": "practiceSkill", "skill": "Force", "amount": 1 },
+                  { "type": "log", "text": "You go down hard—then the slide loses interest. You crawl clear, rattled but moving." }
+                ],
+                "to": "wild_obstacle1_after"
+              }
+            }
+          }
+        },
+        {
+          "text": "Trace a calming mark and ask the slope to settle.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Warding",
+            "difficulty": 48,
+            "modifiers": [
+              { "if": { "type": "hasFlag", "flag": "HUB_WARDED" }, "add": 8 }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 2 },
+                  { "type": "practiceSkill", "skill": "Warding", "amount": 1 },
+                  { "type": "log", "text": "Pebbles settle as if listening. A narrow lane holds long enough to pass." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "practiceSkill", "skill": "Warding", "amount": 1 },
+                  { "type": "log", "text": "Your pattern holds unevenly. Enough to slip through without the hill taking more." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_TROUBLE" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "modifyHealth", "delta": -1 },
+                  { "type": "practiceSkill", "skill": "Warding", "amount": 1 },
+                  { "type": "log", "text": "Your mark skitters. The slope answers with a shove. You scramble through, leaving a loud story behind." }
+                ],
+                "to": "wild_obstacle1_after"
+              }
+            }
+          }
+        },
+        {
+          "text": "Read the stones and pick the one stable line.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Insight",
+            "difficulty": 48,
+            "modifiers": [
+              { "if": { "type": "hasFlag", "flag": "HUB_WARDED" }, "add": 6 }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 2 },
+                  { "type": "practiceSkill", "skill": "Insight", "amount": 1 },
+                  { "type": "log", "text": "You step where the ridge is least hungry." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "practiceSkill", "skill": "Insight", "amount": 1 },
+                  { "type": "log", "text": "A stone rolls, but you catch yourself and keep moving." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_TROUBLE" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "modifyHealth", "delta": -1 },
+                  { "type": "practiceSkill", "skill": "Insight", "amount": 1 },
+                  { "type": "log", "text": "The ridge lies with every stone. You still get through—just not quietly." }
+                ],
+                "to": "wild_obstacle1_after"
+              }
+            }
+          }
+        },
+        {
+          "text": "Move like the wind: light steps, no sudden weight.",
+          "requires": [
+            { "type": "notFlag", "flag": "HUB_WATCHLIST" }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Stealth",
+            "difficulty": 46,
+            "modifiers": [],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 2 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You pick the quiet stones. The slope never finds a reason to wake." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You get through, but not cleanly. A few stones tumble in a way that invites attention later." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_TROUBLE" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "modifyHealth", "delta": -1 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "The slide whispers, then snaps loud. You're through, bruised and annoyed." }
+                ],
+                "to": "wild_obstacle1_after"
+              }
+            }
+          }
+        },
+        {
+          "text": "Keep low and quick—before anyone 'helpful' notices your trail.",
+          "requires": [
+            { "type": "hasFlag", "flag": "HUB_WATCHLIST" }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Stealth",
+            "difficulty": 56,
+            "modifiers": [],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You move like you're late for something. The ridge keeps your secret." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 4 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You get through, but the ridge hears you. That's not always the same as being alone." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_TROUBLE" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 4 },
+                  { "type": "modifyHealth", "delta": -1 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You scramble and slide, leaving a messy story behind. Still—your feet land on the far side." }
+                ],
+                "to": "wild_obstacle1_after"
+              }
+            }
+          }
+        },
+        {
+          "text": "Make it look accidental—then walk away smiling.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Charm",
+            "difficulty": 52,
+            "modifiers": [],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 2 },
+                  { "type": "practiceSkill", "skill": "Charm", "amount": 1 },
+                  { "type": "log", "text": "You turn a near-mistake into a harmless moment. Even the ridge seems convinced." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "practiceSkill", "skill": "Charm", "amount": 1 },
+                  { "type": "log", "text": "It looks ordinary enough, but the moment lingers. Ordinary things can still be traced." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_TROUBLE" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "modifyHealth", "delta": -1 },
+                  { "type": "practiceSkill", "skill": "Charm", "amount": 1 },
+                  { "type": "log", "text": "Your performance rings false. You still get through—just with the sense of being noticed." }
+                ],
+                "to": "wild_obstacle1_after"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "wild_obstacle1_unwarded",
+      "title": "Stone-Snare",
+      "text": "Loose rock gives way beneath your step—an old slide waiting to be woken. The ridge feels eager to take what it can.",
+      "choices": [
+        {
+          "text": "Brace and drive through the shifting stones.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Force",
+            "difficulty": 50,
+            "modifiers": [],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 2 },
+                  { "type": "practiceSkill", "skill": "Force", "amount": 1 },
+                  { "type": "log", "text": "You muscle through and force the slope to yield." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "modifyHealth", "delta": -2 },
+                  { "type": "practiceSkill", "skill": "Force", "amount": 1 },
+                  { "type": "log", "text": "You win, but the ridge collects payment in scraped skin and sore joints." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_TROUBLE" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 4 },
+                  { "type": "modifyHealth", "delta": -3 },
+                  { "type": "practiceSkill", "skill": "Force", "amount": 1 },
+                  { "type": "log", "text": "The slide drags you down like a rough hand. You crawl free on the far side, breathing dust and stubbornness." }
+                ],
+                "to": "wild_obstacle1_after"
+              }
+            }
+          }
+        },
+        {
+          "text": "Read the slope and find the one stable line.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Insight",
+            "difficulty": 50,
+            "modifiers": [],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 2 },
+                  { "type": "practiceSkill", "skill": "Insight", "amount": 1 },
+                  { "type": "log", "text": "You spot the stones that carry weight and the ones that only pretend to." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "modifyHealth", "delta": -1 },
+                  { "type": "practiceSkill", "skill": "Insight", "amount": 1 },
+                  { "type": "log", "text": "Your route holds, mostly. A sudden shift bruises you, then lets you go." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_TROUBLE" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 4 },
+                  { "type": "modifyHealth", "delta": -2 },
+                  { "type": "practiceSkill", "skill": "Insight", "amount": 1 },
+                  { "type": "log", "text": "The ridge lies with every stone. You still make it through—just not the way you wanted." }
+                ],
+                "to": "wild_obstacle1_after"
+              }
+            }
+          }
+        },
+        {
+          "text": "Move like the wind: light steps, no sudden weight.",
+          "requires": [
+            { "type": "notFlag", "flag": "HUB_WATCHLIST" }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Stealth",
+            "difficulty": 48,
+            "modifiers": [],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 2 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You step where the ridge is least hungry." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "modifyHealth", "delta": -1 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "A stone rolls. You catch yourself—hard—and keep moving." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_TROUBLE" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 4 },
+                  { "type": "modifyHealth", "delta": -2 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "The slide catches you mid-step. You spill across grit and come up on the far side with blood on your palms." }
+                ],
+                "to": "wild_obstacle1_after"
+              }
+            }
+          }
+        },
+        {
+          "text": "Keep your hood low and move anyway—fast.",
+          "requires": [
+            { "type": "hasFlag", "flag": "HUB_WATCHLIST" }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Stealth",
+            "difficulty": 58,
+            "modifiers": [],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You hurry through, leaving little for a watcher to follow." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 4 },
+                  { "type": "modifyHealth", "delta": -1 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You get through, but you can feel how your passage would read to someone who cares." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_TROUBLE" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 4 },
+                  { "type": "modifyHealth", "delta": -3 },
+                  { "type": "practiceSkill", "skill": "Stealth", "amount": 1 },
+                  { "type": "log", "text": "You slide loud and ugly. If someone wanted to follow you later, you've written them a map." }
+                ],
+                "to": "wild_obstacle1_after"
+              }
+            }
+          }
+        },
+        {
+          "text": "Make it look accidental—then walk away smiling.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Charm",
+            "difficulty": 54,
+            "modifiers": [],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 2 },
+                  { "type": "practiceSkill", "skill": "Charm", "amount": 1 },
+                  { "type": "log", "text": "You turn a near-mistake into a harmless moment. Even the ridge seems convinced." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "mixed": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_CLEARED" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "practiceSkill", "skill": "Charm", "amount": 1 },
+                  { "type": "log", "text": "It looks ordinary enough, but the moment lingers. Ordinary things can still be traced." }
+                ],
+                "to": "wild_obstacle1_after"
+              },
+              "fail": {
+                "effects": [
+                  { "type": "setFlag", "flag": "WILD_OB1_TROUBLE" },
+                  { "type": "setFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 3 },
+                  { "type": "modifyHealth", "delta": -1 },
+                  { "type": "practiceSkill", "skill": "Charm", "amount": 1 },
+                  { "type": "log", "text": "Your performance rings false. You still get through—just with the sense of being noticed." }
+                ],
+                "to": "wild_obstacle1_after"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "wild_obstacle1_after",
+      "title": "Beyond the Ridge",
+      "text": "On the far side, the wind changes. The ground levels out, and the scrub grows thicker—good for hiding, bad for surprises.",
+      "choices": [
+        {
+          "text": "Circle back while the day still belongs to you.",
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "log", "text": "You turn back with new knowledge in your bones." }
+                ],
+                "to": "hub_square_return_router"
+              }
+            }
+          }
+        },
+        {
+          "text": "Press on toward the wilderness edge.",
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "advanceTime", "ticks": 1 },
+                  { "type": "fatigue", "delta": 1 },
+                  { "type": "log", "text": "You take a few more careful minutes, letting the wilderness show its next page." }
+                ],
+                "to": "wilderness_exit"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch1_to_ch2_bridge",
+      "title": "A Shift In The Air",
+      "text": [
+        "The road behind you becomes noise, then memory.",
+        "Ahead, the day feels almost ordinary—until you notice how often the same details repeat."
+      ],
+      "choices": [
+        {
+          "text": "Enter and keep your pace steady.",
+          "outcomes": [
+            {
+              "text": [
+                "You move like you belong here.",
+                "If anything is watching, it gets only a clean, simple story."
+              ],
+              "effects": [
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "log", "message": "Transitioned into Chapter 2 space." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Enter, then slow down long enough to read the flow.",
+          "outcomes": [
+            {
+              "text": [
+                "You pause just long enough to see where people gather and where they avoid.",
+                "Patterns show themselves when you stop chasing the day."
+              ],
+              "effects": [
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "practiceSkill", "skill": "OBSERVATION", "amount": 1 },
+                { "type": "log", "message": "You entered Chapter 2 with a measured eye." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        }
+      ]
+    }
+
+  ]
+}

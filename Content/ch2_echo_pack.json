@@ -1,0 +1,808 @@
+{
+  "packId": "chapter2_v1",
+  "version": "1.0.0",
+  "title": "Chapter 2: Echo",
+  "definitions": {
+    "classes": [
+      {
+        "id": "VANGUARD",
+        "displayName": "Vanguard"
+      },
+      {
+        "id": "ARCANIST",
+        "displayName": "Arcanist"
+      },
+      {
+        "id": "SHADE",
+        "displayName": "Shade"
+      }
+    ],
+    "stats": [
+      "Body",
+      "Mind",
+      "Edge"
+    ],
+    "skills": [
+      "ATHLETICS",
+      "OBSERVATION",
+      "FOCUS",
+      "SUBTERFUGE",
+      "SOCIAL",
+      "INSIGHT",
+      "LORE",
+      "BARGAIN"
+    ],
+    "timeModel": {
+      "ticksPerPhase": 6,
+      "phases": [
+        "Dawn",
+        "Day",
+        "Dusk",
+        "Night"
+      ]
+    }
+  },
+  "scenes": [
+    {
+      "id": "ch2_hub_square",
+      "title": "Second Roads",
+      "text": [
+        "The hub feels familiar until it doesn't.",
+        "Faces repeat at the edge of your notice. Footsteps seem to match your pace for half a block, then vanish."
+      ],
+      "choices": [
+        {
+          "text": "Head toward the narrow crossing.",
+          "outcomes": [
+            {
+              "text": [
+                "You let the crowd pull you in the right direction.",
+                "The route ahead tightens into a single-file problem."
+              ],
+              "effects": [
+                { "type": "log", "message": "You moved toward a bottleneck where choices show their cost." }
+              ],
+              "to": "ch2_first_teach_obstacle"
+            }
+          ]
+        },
+        {
+          "text": "Find a quiet place to blend in for a while.",
+          "outcomes": [
+            {
+              "text": [
+                "You look for steam, soap, and anonymity—somewhere routine can erase edges.",
+                "You keep moving like you belong."
+              ],
+              "effects": [
+                { "type": "log", "message": "You looked for a way to reduce attention without a confrontation." }
+              ],
+              "to": "ch2_anchor_release"
+            }
+          ]
+        },
+        {
+          "text": "Plant a different story about where you've been.",
+          "outcomes": [
+            {
+              "text": [
+                "You listen for the right ears and the right gaps between words.",
+                "If your trail exists, you can bend it."
+              ],
+              "effects": [
+                { "type": "log", "message": "You considered misdirection: faster than blending, but never free." }
+              ],
+              "to": "ch2_misdirect_release"
+            }
+          ]
+        },
+        {
+          "text": "Take a slow lap and watch who watches.",
+          "requires": [
+            { "type": "notFlag", "flag": "CH2_ECHO_2" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You drift with purpose, not haste.",
+                "Nothing grabs you. Nothing follows you—at least not closely."
+              ],
+              "effects": [
+                { "type": "practiceSkill", "skill": "OBSERVATION", "amount": 1 },
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "log", "message": "You spent time reading the room without feeding it." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Take a slow lap and watch who watches.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_2" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You drift with purpose, not haste.",
+                "A familiar face appears twice from two angles. It might be coincidence. It might be practice."
+              ],
+              "effects": [
+                { "type": "practiceSkill", "skill": "OBSERVATION", "amount": 1 },
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "fatigue", "amount": 1 },
+                { "type": "log", "message": "With higher echo, watching costs more. Being watched costs even more." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Slip through the crowd without letting anyone set your pace.",
+          "requires": [
+            { "type": "notFlag", "flag": "CH2_ECHO_2" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You move with the crowd, but not inside it—using gaps, pauses, and blind angles.",
+                "For a while, you feel your own rhythm return."
+              ],
+              "effects": [
+                { "type": "practiceSkill", "skill": "SUBTERFUGE", "amount": 1 },
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "log", "message": "You navigated the hub without feeding the room's attention." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Slip through the crowd without letting anyone set your pace.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_2" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You move with the crowd, but not inside it—using gaps, pauses, and blind angles.",
+                "A familiar face crosses your path at the wrong time. You adjust twice before the pattern breaks."
+              ],
+              "effects": [
+                { "type": "practiceSkill", "skill": "SUBTERFUGE", "amount": 1 },
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "fatigue", "amount": 1 },
+                { "type": "log", "message": "With higher echo, slipping free takes extra effort and time." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Approach the breathless courier near the post.",
+          "requires": [
+            { "type": "notFlag", "flag": "CH2_ECHO_2" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You close the distance without rushing them.",
+                "Their eyes track you once, then settle—barely."
+              ],
+              "effects": [
+                { "type": "log", "message": "You approached the courier under low echo." }
+              ],
+              "to": "ch2_npc_courier_thread"
+            }
+          ]
+        },
+        {
+          "text": "Approach the breathless courier near the post.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_2" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You close the distance without rushing them.",
+                "A pause stretches as the courier checks behind you first—then decides whether you're safe to stand near."
+              ],
+              "effects": [
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "log", "message": "High echo adds friction before the courier will engage." }
+              ],
+              "to": "ch2_npc_courier_thread"
+            }
+          ]
+        },
+        {
+          "text": "Follow the strange feeling that the day is repeating.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_2" },
+            { "type": "notFlag", "flag": "CH2_ECHO_ESCALATION_SPENT" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You let your attention widen instead of narrowing.",
+                "The pattern doesn't vanish. It sharpens."
+              ],
+              "effects": [
+                { "type": "log", "message": "You stepped into the echo spike." }
+              ],
+              "to": "ch2_echo_escalation"
+            }
+          ]
+        },
+        {
+          "text": "Follow the strange feeling that the day is repeating.",
+          "requires": [
+            { "type": "notFlag", "flag": "CH2_ECHO_2" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You test the feeling, watching for the repeat.",
+                "Nothing catches—just a busy day and your own tired thoughts."
+              ],
+              "effects": [
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "log", "message": "No spike: echo not high enough yet." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch2_first_teach_obstacle",
+      "title": "The Bottleneck",
+      "text": [
+        "A narrow crossing forces the crowd into a slow, impatient line.",
+        "Two voices argue up front. The line hesitates. The air thickens with waiting."
+      ],
+      "choices": [
+        {
+          "text": "Push through fast before it gets worse.",
+          "requires": [
+            { "type": "notFlag", "flag": "CH2_ECHO_1" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You pick a gap and take it, shoulders angled, feet sure.",
+                "You're through quickly—quick enough that a few heads turn to follow the motion you made."
+              ],
+              "effects": [
+                { "type": "setFlag", "flag": "CH2_ECHO_1" },
+                { "type": "practiceSkill", "skill": "ATHLETICS", "amount": 1 },
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "log", "message": "You chose speed. It worked—and it carried." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Push through fast before it gets worse.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_1" },
+            { "type": "notFlag", "flag": "CH2_ECHO_2" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You pick a gap and take it, shoulders angled, feet sure.",
+                "Someone mutters your description like a casual joke. It spreads the way jokes do."
+              ],
+              "effects": [
+                { "type": "setFlag", "flag": "CH2_ECHO_2" },
+                { "type": "practiceSkill", "skill": "ATHLETICS", "amount": 1 },
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "fatigue", "amount": 1 },
+                { "type": "log", "message": "The same move lands differently once the room is already primed." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Push through fast before it gets worse.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_2" },
+            { "type": "notFlag", "flag": "CH2_ECHO_3" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You pick a gap and take it, shoulders angled, feet sure.",
+                "A hand reaches out—not to stop you, just to test you. You slip free, but the moment sticks to you."
+              ],
+              "effects": [
+                { "type": "setFlag", "flag": "CH2_ECHO_3" },
+                { "type": "practiceSkill", "skill": "ATHLETICS", "amount": 1 },
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "fatigue", "amount": 1 },
+                { "type": "log", "message": "At higher echo, the world starts to answer back." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Push through fast before it gets worse.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_3" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You move like you mean it and the line yields just enough.",
+                "You get through, but you feel the pause behind you—like a page being turned."
+              ],
+              "effects": [
+                { "type": "practiceSkill", "skill": "ATHLETICS", "amount": 1 },
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "fatigue", "amount": 1 },
+                { "type": "log", "message": "You forced speed again. The crossing let you pass, but it didn't forget." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Take the longer way around and stay unremarkable.",
+          "requires": [
+            { "type": "notFlag", "flag": "CH2_ECHO_2" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You step out of the line before impatience can grab you.",
+                "By the time you rejoin the flow, you're just another body moving with purpose."
+              ],
+              "effects": [
+                { "type": "advanceTime", "amount": 2 },
+                { "type": "practiceSkill", "skill": "FOCUS", "amount": 1 },
+                { "type": "setFlag", "flag": "CH2_ECHO_ANCHORED" },
+                { "type": "log", "message": "You paid time to keep your edges from catching." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Take the longer way around and stay unremarkable.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_2" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You step out of the line before impatience can grab you.",
+                "A familiar face appears at the far corner, then disappears behind a cart. You keep walking anyway."
+              ],
+              "effects": [
+                { "type": "advanceTime", "amount": 2 },
+                { "type": "fatigue", "amount": 1 },
+                { "type": "practiceSkill", "skill": "FOCUS", "amount": 1 },
+                { "type": "setFlag", "flag": "CH2_ECHO_ANCHORED" },
+                { "type": "log", "message": "At higher echo, even the quiet choice has friction. It still works." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch2_anchor_release",
+      "title": "Anchoring",
+      "text": [
+        "You find a place where routine is stronger than curiosity.",
+        "Soap, steam, folded cloth—ordinary motions that make you ordinary again."
+      ],
+      "choices": [
+        {
+          "text": "Blend into routine until the edge fades.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_3" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You take the long version of ordinary: rinse, fold, wait, repeat.",
+                "By the time you step out, the sense of being followed has loosened—still present, but less sharp."
+              ],
+              "effects": [
+                { "type": "removeFlag", "flag": "CH2_ECHO_3" },
+                { "type": "advanceTime", "amount": 2 },
+                { "type": "practiceSkill", "skill": "FOCUS", "amount": 1 },
+                { "type": "log", "message": "You reduced echo by anchoring yourself in routine." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Blend into routine until the edge fades.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_2" },
+            { "type": "notFlag", "flag": "CH2_ECHO_3" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You take the long version of ordinary: rinse, fold, wait, repeat.",
+                "It's not dramatic, but it works. You feel less like a story people are telling."
+              ],
+              "effects": [
+                { "type": "removeFlag", "flag": "CH2_ECHO_2" },
+                { "type": "advanceTime", "amount": 2 },
+                { "type": "practiceSkill", "skill": "FOCUS", "amount": 1 },
+                { "type": "log", "message": "You eased the room's attention by becoming background again." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Blend into routine until the edge fades.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_1" },
+            { "type": "notFlag", "flag": "CH2_ECHO_2" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You keep it simple: water, soap, a steady breath.",
+                "When you step out, you feel like your trail has fewer hooks."
+              ],
+              "effects": [
+                { "type": "removeFlag", "flag": "CH2_ECHO_1" },
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "practiceSkill", "skill": "FOCUS", "amount": 1 },
+                { "type": "log", "message": "You washed away the earliest trace of attention." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Blend into routine until the edge fades.",
+          "requires": [
+            { "type": "notFlag", "flag": "CH2_ECHO_1" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You spend a little time being no one in particular.",
+                "It doesn't change the day, but it steadies you."
+              ],
+              "effects": [
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "practiceSkill", "skill": "FOCUS", "amount": 1 },
+                { "type": "log", "message": "You anchored yourself without needing to shed any echo." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch2_misdirect_release",
+      "title": "Misdirection",
+      "text": [
+        "You find a seam in the day—small talk, overheard names, the kind of harmless gossip that sticks.",
+        "If attention is a thread, you can knot it somewhere else."
+      ],
+      "choices": [
+        {
+          "text": "Plant a clean, believable story and let it travel.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_3" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You speak just enough to be repeated—and not enough to be pinned down.",
+                "When you walk away, you feel the pressure slide sideways, chasing a shadow you left behind."
+              ],
+              "effects": [
+                { "type": "removeFlag", "flag": "CH2_ECHO_3" },
+                { "type": "setFlag", "flag": "CH2_ECHO_SOFTENED" },
+                { "type": "fatigue", "amount": 2 },
+                { "type": "practiceSkill", "skill": "SUBTERFUGE", "amount": 1 },
+                { "type": "log", "message": "You reduced echo through misdirection. It worked, but it took energy." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Plant a clean, believable story and let it travel.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_2" },
+            { "type": "notFlag", "flag": "CH2_ECHO_3" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You speak just enough to be repeated—and not enough to be pinned down.",
+                "The room keeps its eyes, but they stop tracking your exact steps."
+              ],
+              "effects": [
+                { "type": "removeFlag", "flag": "CH2_ECHO_2" },
+                { "type": "setFlag", "flag": "CH2_ECHO_SOFTENED" },
+                { "type": "fatigue", "amount": 1 },
+                { "type": "practiceSkill", "skill": "SUBTERFUGE", "amount": 1 },
+                { "type": "log", "message": "You redirected attention without making it obvious." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Plant a clean, believable story and let it travel.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_1" },
+            { "type": "notFlag", "flag": "CH2_ECHO_2" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You add a harmless detail to the air and let it float away from you.",
+                "If anyone was watching closely, they now have something else to chew on."
+              ],
+              "effects": [
+                { "type": "removeFlag", "flag": "CH2_ECHO_1" },
+                { "type": "setFlag", "flag": "CH2_ECHO_SOFTENED" },
+                { "type": "fatigue", "amount": 1 },
+                { "type": "practiceSkill", "skill": "SUBTERFUGE", "amount": 1 },
+                { "type": "log", "message": "You snipped the earliest thread of attention and let it fray elsewhere." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Plant a clean, believable story and let it travel.",
+          "requires": [
+            { "type": "notFlag", "flag": "CH2_ECHO_1" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You test a small lie that harms no one and commits you to nothing.",
+                "It doesn't change much—yet—but it sharpens your sense of timing."
+              ],
+              "effects": [
+                { "type": "fatigue", "amount": 1 },
+                { "type": "practiceSkill", "skill": "SUBTERFUGE", "amount": 1 },
+                { "type": "log", "message": "You practiced misdirection without needing to reduce echo." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch2_echo_escalation",
+      "title": "The Ripple Answers",
+      "text": [
+        "A coincidence brushes you twice in the same minute.",
+        "A glance lingers too long. A step matches yours, then stops when you stop."
+      ],
+      "choices": [
+        {
+          "text": "Keep moving as if it means nothing.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_2" },
+            { "type": "notFlag", "flag": "CH2_ECHO_ESCALATION_SPENT" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You refuse to react.",
+                "Still, the day seems to tighten around you—like the room learned your outline."
+              ],
+              "effects": [
+                { "type": "setFlag", "flag": "CH2_ECHO_ESCALATION_SPENT" },
+                { "type": "fatigue", "amount": 1 },
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "log", "message": "ECHO escalation triggered once: the world pushed back." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Keep moving as if it means nothing.",
+          "requires": [
+            { "type": "notFlag", "flag": "CH2_ECHO_2" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You keep walking. Nothing catches.",
+                "For now, it really is just a busy day."
+              ],
+              "effects": [
+                { "type": "log", "message": "No escalation: echo not high enough." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Keep moving as if it means nothing.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_ESCALATION_SPENT" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You keep walking. The air remains watchful, but it doesn't spike again.",
+                "Whatever lesson the day wanted to teach, it already tried."
+              ],
+              "effects": [
+                { "type": "log", "message": "Escalation already spent; no repeat spike." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch2_npc_courier_thread",
+      "title": "A Breathless Courier",
+      "text": [
+        "A courier pauses near a post, pretending to tie a strap that doesn't need tying.",
+        "Their eyes scan faces, then streets, then faces again—like they're counting exits."
+      ],
+      "choices": [
+        {
+          "text": "Offer to help without asking for details.",
+          "requires": [
+            { "type": "notFlag", "flag": "CH2_ECHO_2" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You keep your hands visible and your voice low.",
+                "The courier studies you for a heartbeat, then nods as if accepting the shape of you."
+              ],
+              "effects": [
+                { "type": "practiceSkill", "skill": "SOCIAL", "amount": 1 },
+                { "type": "log", "message": "Courier interaction: you offered help cleanly." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Offer to help without asking for details.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_2" },
+            { "type": "notFlag", "flag": "CH2_ECHO_3" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You keep your hands visible and your voice low.",
+                "The courier's gaze flicks behind you twice before they answer, as if your presence comes with a tail."
+              ],
+              "effects": [
+                { "type": "practiceSkill", "skill": "SOCIAL", "amount": 1 },
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "log", "message": "Courier interaction under echo: caution adds delay." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Offer to help without asking for details.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_3" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You keep your hands visible and your voice low.",
+                "The courier flinches like you said the wrong word. They recover fast, but the moment costs you both."
+              ],
+              "effects": [
+                { "type": "practiceSkill", "skill": "SOCIAL", "amount": 1 },
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "fatigue", "amount": 1 },
+                { "type": "log", "message": "Courier interaction at high echo: effort rises, trust thins." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Ask what kind of trouble they're avoiding.",
+          "requires": [
+            { "type": "notFlag", "flag": "CH2_ECHO_2" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You keep the question broad, easy to dodge.",
+                "The courier answers in halves—enough to point at danger without naming it."
+              ],
+              "effects": [
+                { "type": "practiceSkill", "skill": "INSIGHT", "amount": 1 },
+                { "type": "log", "message": "Courier interaction: you pulled a useful hint without pushing." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Ask what kind of trouble they're avoiding.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_2" },
+            { "type": "notFlag", "flag": "CH2_ECHO_3" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You keep the question broad, easy to dodge.",
+                "The courier answers slowly, eyes fixed on a spot past your shoulder. The hint still lands—just wrapped in fear."
+              ],
+              "effects": [
+                { "type": "practiceSkill", "skill": "INSIGHT", "amount": 1 },
+                { "type": "fatigue", "amount": 1 },
+                { "type": "log", "message": "Under echo, questions feel heavier even when they're gentle." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Ask what kind of trouble they're avoiding.",
+          "requires": [
+            { "type": "hasFlag", "flag": "CH2_ECHO_3" }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You keep the question broad, easy to dodge.",
+                "The courier's mouth opens, then shuts. They give you a look that says: not here, not now."
+              ],
+              "effects": [
+                { "type": "practiceSkill", "skill": "INSIGHT", "amount": 1 },
+                { "type": "advanceTime", "amount": 1 },
+                { "type": "fatigue", "amount": 1 },
+                { "type": "log", "message": "At high echo, the safest answer is sometimes silence." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        },
+        {
+          "text": "Step aside and let them pass without engaging.",
+          "outcomes": [
+            {
+              "text": [
+                "You give space and become part of the background again.",
+                "The courier slips away like a dropped thought."
+              ],
+              "effects": [
+                { "type": "log", "message": "You disengaged from the courier without consequence." }
+              ],
+              "to": "ch2_hub_square"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

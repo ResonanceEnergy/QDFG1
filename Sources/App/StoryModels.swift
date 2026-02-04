@@ -13,6 +13,15 @@ struct StoryPack: Codable {
     var sceneById: [String: Scene] {
         Dictionary(uniqueKeysWithValues: scenes.map { ($0.id, $0) })
     }
+
+    init(title: String, startScene: String, scenes: [Scene]) {
+        self.packId = "merged"
+        self.version = "1.0.0"
+        self.title = title
+        self.definitions = Definitions(classes: [], stats: [], skills: [], timeModel: TimeModel(ticksPerPhase: 6, phases: ["Dawn", "Day", "Dusk", "Night"]))
+        self.startSceneId = startScene
+        self.scenes = scenes
+    }
 }
 
 struct Definitions: Codable {
@@ -108,25 +117,26 @@ enum Requirement: Codable {
 // MARK: - Effects
 
 enum Effect: Codable {
-    case addFlag(String)
-    case removeFlag(String)
+    case setFlag(String)
+    case clearFlag(String)
+
     case modifyHealth(Int)
-    case modifyFatigue(Int)
+    case fatigue(Int)
     case practiceSkill(skill: String, amount: Int)
     case advanceTime(ticks: Int)
     case log(String)
 
-    private enum CodingKeys: String, CodingKey { case type, flag, amount, skill, ticks, text }
+    private enum CodingKeys: String, CodingKey { case type, flag, amount, skill, ticks, text, delta }
 
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         let type = try c.decode(String.self, forKey: .type)
 
         switch type {
-        case "addFlag": self = .addFlag(try c.decode(String.self, forKey: .flag))
+        case "setFlag": self = .setFlag(try c.decode(String.self, forKey: .flag))
         case "removeFlag": self = .removeFlag(try c.decode(String.self, forKey: .flag))
         case "modifyHealth": self = .modifyHealth(try c.decode(Int.self, forKey: .amount))
-        case "modifyFatigue": self = .modifyFatigue(try c.decode(Int.self, forKey: .amount))
+        case "fatigue": self = .fatigue(try c.decode(Int.self, forKey: .delta))
         case "practiceSkill": self = .practiceSkill(skill: try c.decode(String.self, forKey: .skill), amount: try c.decode(Int.self, forKey: .amount))
         case "advanceTime": self = .advanceTime(ticks: try c.decode(Int.self, forKey: .ticks))
         case "log": self = .log(try c.decode(String.self, forKey: .text))
@@ -137,10 +147,10 @@ enum Effect: Codable {
     func encode(to encoder: Encoder) throws {
         var c = encoder.container(keyedBy: CodingKeys.self)
         switch self {
-        case .addFlag(let f): try c.encode("addFlag", forKey: .type); try c.encode(f, forKey: .flag)
+        case .setFlag(let f): try c.encode("setFlag", forKey: .type); try c.encode(f, forKey: .flag)
         case .removeFlag(let f): try c.encode("removeFlag", forKey: .type); try c.encode(f, forKey: .flag)
         case .modifyHealth(let a): try c.encode("modifyHealth", forKey: .type); try c.encode(a, forKey: .amount)
-        case .modifyFatigue(let a): try c.encode("modifyFatigue", forKey: .type); try c.encode(a, forKey: .amount)
+        case .fatigue(let d): try c.encode("fatigue", forKey: .type); try c.encode(d, forKey: .delta)
         case .practiceSkill(let s, let a): try c.encode("practiceSkill", forKey: .type); try c.encode(s, forKey: .skill); try c.encode(a, forKey: .amount)
         case .advanceTime(let t): try c.encode("advanceTime", forKey: .type); try c.encode(t, forKey: .ticks)
         case .log(let text): try c.encode("log", forKey: .type); try c.encode(text, forKey: .text)
@@ -169,6 +179,7 @@ struct RequirementWrapper: Codable {
     let type: String
     let flag: String?
     let phase: String?
+    let classId: String?
 }
 
 struct OutcomeSet: Codable {

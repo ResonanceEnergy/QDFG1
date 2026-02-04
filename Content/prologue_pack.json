@@ -88,7 +88,7 @@
                     "amount": 2
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "LEARNED_SMOKE_SOURCE"
                   },
                   {
@@ -123,8 +123,8 @@
               "fail": {
                 "effects": [
                   {
-                    "type": "modifyFatigue",
-                    "amount": 1
+                    "type": "fatigue",
+                    "delta": 1
                   },
                   {
                     "type": "log",
@@ -193,7 +193,7 @@
       "text": "\"Something was taken,\" the local says. \"From the storehouse. Whoever did it ran toward the ruins. No one wants to go after dark.\"",
       "onEnter": [
         {
-          "type": "addFlag",
+          "type": "setFlag",
           "flag": "HEARD_THEFT"
         }
       ],
@@ -214,7 +214,7 @@
                     "amount": 2
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "KNOW_ITEM_IMPORTANT"
                   },
                   {
@@ -290,7 +290,7 @@
                     "amount": 2
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "LEARNED_ENTRY_STYLE"
                   },
                   {
@@ -325,8 +325,8 @@
               "fail": {
                 "effects": [
                   {
-                    "type": "modifyFatigue",
-                    "amount": 1
+                    "type": "fatigue",
+                    "delta": 1
                   },
                   {
                     "type": "log",
@@ -374,11 +374,11 @@
               "ticks": 1
             },
             {
-              "type": "modifyFatigue",
-              "amount": -1
+              "type": "fatigue",
+              "delta": -1
             },
             {
-              "type": "addFlag",
+              "type": "setFlag",
               "flag": "PREPARED_BASIC"
             },
             {
@@ -397,11 +397,11 @@
               "ticks": 6
             },
             {
-              "type": "modifyFatigue",
-              "amount": -2
+              "type": "fatigue",
+              "delta": -2
             },
             {
-              "type": "addFlag",
+              "type": "setFlag",
               "flag": "WAITED_UNTIL_MORNING"
             },
             {
@@ -434,7 +434,7 @@
                     "amount": 2
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "FOUND_SAFE_ROUTE"
                   },
                   {
@@ -473,8 +473,8 @@
                     "ticks": 2
                   },
                   {
-                    "type": "modifyFatigue",
-                    "amount": 1
+                    "type": "fatigue",
+                    "delta": 1
                   },
                   {
                     "type": "log",
@@ -524,7 +524,7 @@
                     "amount": 2
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "CONFRONTED_THIEF"
                   },
                   {
@@ -567,11 +567,11 @@
                     "amount": -2
                   },
                   {
-                    "type": "modifyFatigue",
-                    "amount": 2
+                    "type": "fatigue",
+                    "delta": 2
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "HURT_AND_WITHDRAWN"
                   },
                   {
@@ -626,7 +626,7 @@
                     "amount": 2
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "DISRUPTED_WARDS"
                   },
                   {
@@ -648,7 +648,7 @@
                     "amount": 1
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "LEFT_TRACE"
                   },
                   {
@@ -665,11 +665,11 @@
               "fail": {
                 "effects": [
                   {
-                    "type": "modifyFatigue",
-                    "amount": 2
+                    "type": "fatigue",
+                    "delta": 2
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "BACKLASH"
                   },
                   {
@@ -731,7 +731,7 @@
                     "amount": 2
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "ENTERED_UNSEEN"
                   },
                   {
@@ -753,7 +753,7 @@
                     "amount": 1
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "NEARLY_SPOTTED"
                   },
                   {
@@ -774,7 +774,7 @@
                     "amount": -1
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "SPOTTED"
                   },
                   {
@@ -820,7 +820,7 @@
               "success": {
                 "effects": [
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "TOOK_NARROW_ROUTE"
                   },
                   {
@@ -858,8 +858,8 @@
                     "amount": -2
                   },
                   {
-                    "type": "modifyFatigue",
-                    "amount": 2
+                    "type": "fatigue",
+                    "delta": 2
                   },
                   {
                     "type": "advanceTime",
@@ -916,7 +916,7 @@
                     "amount": 2
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "RECOVERED_AFTER_ALERT"
                   },
                   {
@@ -938,8 +938,8 @@
                     "amount": 1
                   },
                   {
-                    "type": "modifyFatigue",
-                    "amount": 1
+                    "type": "fatigue",
+                    "delta": 1
                   },
                   {
                     "type": "advanceTime",
@@ -967,7 +967,7 @@
                     "text": "You\u2019re flushed out. You retreat before it gets worse."
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "MARKED"
                   }
                 ],
@@ -999,7 +999,7 @@
                     "amount": 2
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "TALKED_DOWN"
                   },
                   {
@@ -1021,7 +1021,7 @@
                     "amount": 1
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "PARTIAL_TRUST"
                   },
                   {
@@ -1038,7 +1038,7 @@
               "fail": {
                 "effects": [
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "ESCALATED"
                   },
                   {
@@ -1110,8 +1110,8 @@
                     "amount": -2
                   },
                   {
-                    "type": "modifyFatigue",
-                    "amount": 2
+                    "type": "fatigue",
+                    "delta": 2
                   },
                   {
                     "type": "advanceTime",
@@ -1168,7 +1168,7 @@
           "text": "Return it unopened.",
           "effects": [
             {
-              "type": "addFlag",
+              "type": "setFlag",
               "flag": "RETURNED_UNOPENED"
             },
             {
@@ -1194,7 +1194,7 @@
                     "amount": 2
                   },
                   {
-                    "type": "addFlag",
+                    "type": "setFlag",
                     "flag": "DISCOVERED_TWIST"
                   },
                   {
@@ -1250,7 +1250,7 @@
       "text": "You return with the recovered object. Faces turn toward you\u2014hope mixed with fear.",
       "onEnter": [
         {
-          "type": "addFlag",
+          "type": "setFlag",
           "flag": "PROLOGUE_ITEM_RECOVERED"
         },
         {
@@ -1272,7 +1272,7 @@
       "text": "You return without the item\u2014but with information. The settlement listens more closely than you expected.",
       "onEnter": [
         {
-          "type": "addFlag",
+          "type": "setFlag",
           "flag": "PROLOGUE_TRUTH_LEARNED"
         },
         {

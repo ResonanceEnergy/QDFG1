@@ -1,6 +1,7 @@
 # Scene + Resolution System
 
 A **Scene** is a situation with:
+
 - narrative text
 - choices (some conditional)
 - resolution (direct or skill check)

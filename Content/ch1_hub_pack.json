@@ -1,0 +1,509 @@
+{
+  "packId": "ch1_hub_pack",
+  "version": "1.0.0",
+  "title": "Chapter 1 Hub",
+  "definitions": {
+    "classes": [
+      {
+        "id": "VANGUARD",
+        "displayName": "Vanguard"
+      },
+      {
+        "id": "ARCANIST",
+        "displayName": "Arcanist"
+      },
+      {
+        "id": "SHADE",
+        "displayName": "Shade"
+      }
+    ],
+    "stats": [
+      "Body",
+      "Mind",
+      "Edge"
+    ],
+    "skills": [
+      "Force",
+      "Insight",
+      "Stealth",
+      "Charm",
+      "Warding"
+    ],
+    "timeModel": {
+      "ticksPerPhase": 6,
+      "phases": [
+        "Dawn",
+        "Day",
+        "Dusk",
+        "Night"
+      ]
+    }
+  },
+  "startSceneId": "chapter1_start",
+  "scenes": [
+    {
+      "id": "chapter1_start",
+      "title": "The Hub",
+      "text": "The square is a knot of footpaths and half-finished plans. A watchful guard holds a casual line near the gate. A scholar lingers by a shaded wall with notes in hand. A merchant's stall glints with small, useful things. Beyond the last buildings, a rough track leads toward quiet country.",
+      "choices": [
+        {
+          "id": "HUB_GUARD_FIRST",
+          "text": "Approach the guard near the gate.",
+          "requires": [
+            {
+              "type": "notFlag",
+              "flag": "guard_met"
+            }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "setFlag",
+                    "flag": "guard_met"
+                  },
+                  {
+                    "type": "setFlag",
+                    "flag": "guard_guarded"
+                  },
+                  {
+                    "type": "log",
+                    "text": "You step into his line of sight on purpose."
+                  }
+                ],
+                "to": "npc_guard_thread"
+              }
+            }
+          }
+        },
+        {
+          "id": "HUB_GUARD_RETURN",
+          "text": "Return to the guard.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "guard_met"
+            }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "His attention lands on you like a weight, then steadies."
+                  }
+                ],
+                "to": "npc_guard_thread"
+              }
+            }
+          }
+        },
+        {
+          "id": "HUB_SCHOLAR_FIRST",
+          "text": "Speak with the scholar and his notes.",
+          "requires": [
+            {
+              "type": "notFlag",
+              "flag": "scholar_met"
+            }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "setFlag",
+                    "flag": "scholar_met"
+                  },
+                  {
+                    "type": "setFlag",
+                    "flag": "scholar_open"
+                  },
+                  {
+                    "type": "log",
+                    "text": "He looks up as if you arrived between thoughts."
+                  }
+                ],
+                "to": "npc_scholar_thread"
+              }
+            }
+          }
+        },
+        {
+          "id": "HUB_SCHOLAR_RETURN",
+          "text": "Return to the scholar.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "scholar_met"
+            }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "He makes room in his attention without quite admitting it."
+                  }
+                ],
+                "to": "npc_scholar_thread"
+              }
+            }
+          }
+        },
+        {
+          "id": "HUB_MERCHANT_FIRST",
+          "text": "Browse the merchant's stall.",
+          "requires": [
+            {
+              "type": "notFlag",
+              "flag": "merchant_met"
+            }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "setFlag",
+                    "flag": "merchant_met"
+                  },
+                  {
+                    "type": "setFlag",
+                    "flag": "merchant_open"
+                  },
+                  {
+                    "type": "log",
+                    "text": "A smile arrives before you do."
+                  }
+                ],
+                "to": "npc_merchant_thread"
+              }
+            }
+          }
+        },
+        {
+          "id": "HUB_MERCHANT_RETURN",
+          "text": "Return to the merchant.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "merchant_met"
+            }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "He watches your hands more than your face."
+                  }
+                ],
+                "to": "npc_merchant_thread"
+              }
+            }
+          }
+        },
+        {
+          "id": "HUB_TRAINING_YARD",
+          "text": "Spend time drilling in the yard.",
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "You pick a patch of ground and make it yours for a while."
+                  }
+                ],
+                "to": "S005_TRAIN1"
+              }
+            }
+          }
+        },
+        {
+          "id": "HUB_TRAINING_SIGIL",
+          "text": "Practice careful marks and quiet focus.",
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "You test what holds steady when no one is watching."
+                  }
+                ],
+                "to": "S006_TRAIN2"
+              }
+            }
+          }
+        },
+        {
+          "id": "HUB_UTILITY",
+          "text": "Take care of small practical needs. (supplies, repairs, rest)",
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "You handle the small things before they become sharp problems."
+                  }
+                ],
+                "to": "S007_SHOP"
+              }
+            }
+          }
+        },
+        {
+          "id": "HUB_TO_WILDERNESS",
+          "text": "Head out along the rough track beyond the buildings.",
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "Behind you, voices blur into distance. Ahead, the quiet waits."
+                  }
+                ],
+                "to": "wilderness_exit"
+              }
+            }
+          }
+        },
+        {
+          "id": "HUB_CHECK_FAVORS",
+          "text": "Check for any notes or favors left for you.",
+          "requires": [
+            { "type": "hasFlag", "flag": "HUB_FAVOR_NOTE" },
+            { "type": "notFlag", "flag": "HUB_FAVOR_SPENT" }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "setFlag",
+                    "flag": "HUB_FAVOR_SPENT"
+                  },
+                  {
+                    "type": "log",
+                    "text": "You find a note with a small favor attached. It resolves an outstanding matter."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        },
+        {
+          "id": "HUB_PATROL_ESCALATION",
+          "text": "Notice that patrols have tightened around the square.",
+          "requires": [
+            { "type": "hasFlag", "flag": "HUB_WATCHLIST" },
+            { "type": "notFlag", "flag": "HUB_PATROLS_ESCALATION_SPENT" }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "setFlag",
+                    "flag": "HUB_PATROLS_ESCALATION_SPENT"
+                  },
+                  {
+                    "type": "setFlag",
+                    "flag": "HUB_PATROLS_TIGHTENED"
+                  },
+                  {
+                    "type": "log",
+                    "text": "Later, you notice patrol routes overlap in new ways. The town has decided to be thorough."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "hub_square_return_router",
+      "title": "Back Inside",
+      "text": "Stone underfoot, voices in layers, the smell of cooked grain and old dust. Town again.",
+      "choices": [
+        {
+          "text": "Blend back into the square.",
+          "requires": [
+            { "type": "hasFlag", "flag": "WILD_OB1_TROUBLE" }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "log", "text": "You move with careful composure. A few aches complain, but you keep your face calm." }
+                ],
+                "to": "hub_square_return_trouble"
+              }
+            }
+          }
+        },
+        {
+          "text": "Blend back into the square.",
+          "requires": [
+            { "type": "hasFlag", "flag": "HUB_PATROLS_TIGHTENED" },
+            { "type": "notFlag", "flag": "WILD_OB1_TROUBLE" }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "log", "text": "You catch the pattern: more uniforms, tighter routes, fewer blind corners. Someone decided to be thorough." }
+                ],
+                "to": "hub_square_return_tight"
+              }
+            }
+          }
+        },
+        {
+          "text": "Blend back into the square.",
+          "requires": [
+            { "type": "hasFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+            { "type": "notFlag", "flag": "WILD_OB2_HEAT_SPENT" },
+            { "type": "notFlag", "flag": "WILD_OB1_TROUBLE" },
+            { "type": "notFlag", "flag": "HUB_PATROLS_TIGHTENED" }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "log", "text": "The town feels watchful in small ways—glances that don’t linger, footsteps that keep pace a little too well." }
+                ],
+                "to": "hub_square_return_heat"
+              }
+            }
+          }
+        },
+        {
+          "text": "Blend back into the square.",
+          "requires": [
+            { "type": "notFlag", "flag": "WILD_OB1_TROUBLE" },
+            { "type": "notFlag", "flag": "WILD_OB1_TRAIL_HEAT" },
+            { "type": "notFlag", "flag": "HUB_PATROLS_TIGHTENED" }
+          ],
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [
+                  { "type": "log", "text": "The square accepts you like weather—noticed, then forgotten." }
+                ],
+                "to": "hub_square_return_clean"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "hub_square_return_trouble",
+      "title": "The Square",
+      "text": "The square looks the same, but you don't. Your stride has a careful edge, and you find yourself measuring benches and shadows as if they might move.",
+      "choices": [
+        {
+          "text": "Get your bearings.",
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "hub_square_return_tight",
+      "title": "The Square",
+      "text": "The square feels tighter today. Patrols cross your path more often, and the usual corners feel watched.",
+      "choices": [
+        {
+          "text": "Get your bearings.",
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "hub_square_return_heat",
+      "title": "The Square",
+      "text": "The square hums with a low attention. Eyes follow you in fragments—enough to know you're marked, not enough to act.",
+      "choices": [
+        {
+          "text": "Get your bearings.",
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "hub_square_return_clean",
+      "title": "The Square",
+      "text": "The square welcomes you back like an old routine. Nothing stirs that shouldn't.",
+      "choices": [
+        {
+          "text": "Get your bearings.",
+          "resolution": {
+            "type": "direct",
+            "outcomes": {
+              "success": {
+                "effects": [],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

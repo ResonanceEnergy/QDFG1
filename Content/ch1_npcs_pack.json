@@ -1,0 +1,2573 @@
+{
+  "packId": "ch1_npcs_pack",
+  "version": "1.0.0",
+  "title": "Chapter 1 NPCs and Training",
+  "definitions": {
+    "classes": [
+      {
+        "id": "VANGUARD",
+        "displayName": "Vanguard"
+      },
+      {
+        "id": "ARCANIST",
+        "displayName": "Arcanist"
+      },
+      {
+        "id": "SHADE",
+        "displayName": "Shade"
+      }
+    ],
+    "stats": [
+      "Body",
+      "Mind",
+      "Edge"
+    ],
+    "skills": [
+      "Force",
+      "Insight",
+      "Stealth",
+      "Charm",
+      "Warding"
+    ],
+    "timeModel": {
+      "ticksPerPhase": 6,
+      "phases": [
+        "Dawn",
+        "Day",
+        "Dusk",
+        "Night"
+      ]
+    }
+  },
+  "scenes": [
+    {
+      "id": "S002_NPC1",
+      "title": "The Guard",
+      "text": "The guard eyes you suspiciously. 'What do you want?'",
+      "onEnter": [
+        {
+          "type": "setFlag",
+          "flag": "guard_met",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "guard_guarded",
+          "value": true
+        }
+      ],
+      "choices": [
+        {
+          "id": "C201_FORCE",
+          "text": "Assert your authority with a firm stance.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Force",
+            "difficulty": 45,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "classIs",
+                  "classId": "VANGUARD"
+                },
+                "add": 10
+              },
+              {
+                "if": {
+                  "type": "hasFlag",
+                  "flag": "hub_gossip_bad"
+                },
+                "add": 10
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Force",
+                    "amount": 3
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "hub_permit"
+                  },
+                  {
+                    "type": "removeFlag",
+                    "flag": "guard_guarded"
+                  },
+                  {
+                    "type": "log",
+                    "text": "You square your shoulders and meet his gaze. He doesnâ€™t flinch â€” but he doesnâ€™t relax either."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Force",
+                    "amount": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "The guard respects your presence but remains cautious."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "addFlag",
+                    "flag": "guard_offended"
+                  },
+                  {
+                    "type": "log",
+                    "text": "Tension rises as the guard bristles at your approach."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        },
+        {
+          "id": "C202_INSIGHT",
+          "text": "Appeal to procedure and duty.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Insight",
+            "difficulty": 40,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "classIs",
+                  "classId": "ARCANIST"
+                },
+                "add": 10
+              },
+              {
+                "if": {
+                  "type": "hasFlag",
+                  "flag": "hub_gossip_bad"
+                },
+                "add": 10
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 3
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "guard_lawful_access"
+                  },
+                  {
+                    "type": "log",
+                    "text": "The guard explains the regulations and grants lawful access."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You get partial information about the rules."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "addFlag",
+                    "flag": "guard_harmless"
+                  },
+                  {
+                    "type": "log",
+                    "text": "The guard sees you as harmless and lets you pass."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        },
+        {
+          "id": "C203_STEALTH",
+          "text": "Slip away unnoticed.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Stealth",
+            "difficulty": 35,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "classIs",
+                  "classId": "SHADE"
+                },
+                "add": 10
+              },
+              {
+                "if": {
+                  "type": "hasFlag",
+                  "flag": "hub_gossip_bad"
+                },
+                "add": 10
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Stealth",
+                    "amount": 3
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "guard_underestimated"
+                  },
+                  {
+                    "type": "log",
+                    "text": "The guard underestimates you and lets his guard down."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Stealth",
+                    "amount": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You're noticed but dismissed as harmless."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "addFlag",
+                    "flag": "guard_wary"
+                  },
+                  {
+                    "type": "log",
+                    "text": "The guard is watching you closely now."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        },
+        {
+          "id": "C204_LAWFUL_ACCESS",
+          "text": "Request lawful access to the restricted area.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "hub_permit"
+            }
+          ],
+          "effects": [
+            {
+              "type": "setFlag",
+              "flag": "hub_lawful_access",
+              "value": true
+            },
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            },
+            {
+              "type": "log",
+              "text": "The guard grants you lawful passage."
+            }
+          ],
+          "to": "chapter1_start"
+        },
+        {
+          "id": "C205_QUIET_ACCESS",
+          "text": "Slip past quietly.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "hub_guard_softened"
+            }
+          ],
+          "effects": [
+            {
+              "type": "setFlag",
+              "flag": "hub_quiet_access",
+              "value": true
+            },
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            },
+            {
+              "type": "log",
+              "text": "You move past unnoticed."
+            }
+          ],
+          "to": "chapter1_start"
+        },
+        {
+          "id": "C206_RESET_TONE",
+          "text": "Reset the tone.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "hub_guard_softened"
+            }
+          ],
+          "effects": [
+            {
+              "type": "setFlag",
+              "flag": "guard_guarded",
+              "value": true
+            },
+            {
+              "type": "setFlag",
+              "flag": "guard_offended",
+              "value": false
+            },
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            },
+            {
+              "type": "log",
+              "text": "You reset the tone."
+            }
+          ],
+          "to": "chapter1_start"
+        },
+        {
+          "id": "C207_ADDRESS_ATTENTION",
+          "text": "Address the attention directly.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "hub_watchlist"
+            }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Insight",
+            "difficulty": 45,
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "The guard eases slightly."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "No change in the guard's demeanor."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "setFlag",
+                    "flag": "guard_offended",
+                    "value": true
+                  },
+                  {
+                    "type": "log",
+                    "text": "Tension increases."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S003_NPC2",
+      "title": "The Scholar",
+      "text": "The scholarly figure looks up from a tome. 'Ah, a seeker of knowledge?'",
+      "onEnter": [
+        {
+          "type": "addFlag",
+          "flag": "scholar_met"
+        },
+        {
+          "type": "addFlag",
+          "flag": "scholar_open"
+        }
+      ],
+      "choices": [
+        {
+          "id": "C301_INSIGHT",
+          "text": "Discuss ancient lore.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Insight",
+            "difficulty": 45,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "classIs",
+                  "classId": "ARCANIST"
+                },
+                "add": 10
+              },
+              {
+                "if": {
+                  "type": "hasFlag",
+                  "flag": "hub_gossip_good"
+                },
+                "add": 5
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 3
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "scholar_impressed"
+                  },
+                  {
+                    "type": "log",
+                    "text": "You trace the idea further than the question intended. He pauses, then adjusts his explanation."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "The scholar offers a tantalizing hint."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "addFlag",
+                    "flag": "scholar_misdirected"
+                  },
+                  {
+                    "type": "log",
+                    "text": "The scholar sighs and gives a cryptic warning."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        },
+        {
+          "id": "C302_WARDING",
+          "text": "Ask about protective wards.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Warding",
+            "difficulty": 40,
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Warding",
+                    "amount": 3
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "hidden_protection"
+                  },
+                  {
+                    "type": "log",
+                    "text": "The scholar teaches you a basic warding technique."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Warding",
+                    "amount": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "The scholar shares a simple ward idea."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Warding",
+                    "amount": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "partial_hidden_protection"
+                  },
+                  {
+                    "type": "log",
+                    "text": "The scholar explains the basics, but you struggle to follow."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        },
+        {
+          "id": "C303_CHARM",
+          "text": "Draw information out conversationally.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Charm",
+            "difficulty": 40,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "classIs",
+                  "classId": "SHADE"
+                },
+                "add": 10
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Charm",
+                    "amount": 3
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "scholar_informal_rumors"
+                  },
+                  {
+                    "type": "log",
+                    "text": "The scholar opens up informally and shares rumors."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Charm",
+                    "amount": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "The scholar shares a bit of gossip."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "The scholar corrects you sharply, but reveals a key fact."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        },
+        {
+          "id": "C304_VOUCH",
+          "text": "Ask the scholar to vouch for you with the guard.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "scholar_impressed"
+            }
+          ],
+          "effects": [
+            {
+              "type": "setFlag",
+              "flag": "hub_permit",
+              "value": true
+            },
+            {
+              "type": "setFlag",
+              "flag": "hub_guard_softened",
+              "value": true
+            },
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            },
+            {
+              "type": "log",
+              "text": "A careful word, placed in the right ear, can move heavier things than steel."
+            }
+          ],
+          "to": "chapter1_start"
+        },
+        {
+          "id": "C305_DEEPER_QUESTION",
+          "text": "Ask a deeper question.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "hub_gossip_good"
+            },
+            {
+              "type": "notFlag",
+              "flag": "scholar_impressed"
+            }
+          ],
+          "effects": [
+            {
+              "type": "setFlag",
+              "flag": "scholar_impressed",
+              "value": true
+            },
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            },
+            {
+              "type": "log",
+              "text": "The scholar shares a deeper insight."
+            }
+          ],
+          "to": "chapter1_start"
+        },
+        {
+          "id": "C306_PROVE_INTENT",
+          "text": "Prove your intent.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "hub_gossip_bad"
+            }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Insight",
+            "difficulty": 45,
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "setFlag",
+                    "flag": "scholar_impressed",
+                    "value": true
+                  },
+                  {
+                    "type": "log",
+                    "text": "The scholar acknowledges your sincerity."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "Partial success; the scholar is less reserved."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "The scholar remains reserved but still provides useful info."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        },
+        {
+          "id": "C307_PATTERNS_ATTENTION",
+          "text": "Ask about patterns of attention.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "hub_watchlist"
+            }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Insight",
+            "difficulty": 45,
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "setFlag",
+                    "flag": "hub_guard_softened",
+                    "value": true
+                  },
+                  {
+                    "type": "log",
+                    "text": "The scholar suggests a way to ease tensions."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "The scholar offers vague advice."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "The scholar declines to comment."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        },
+        {
+          "id": "C308_CLARIFY_PERMIT",
+          "text": "Clarify what the permit implies.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "hub_permit"
+            }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Insight",
+            "difficulty": 45,
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "You learn the permit's limits and opportunities."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "You get a partial understanding."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "The scholar explains the basics."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S004_NPC3",
+      "title": "The Merchant",
+      "text": "The shady merchant grins. 'Looking for something special?'",
+      "onEnter": [
+        {
+          "type": "addFlag",
+          "flag": "merchant_met"
+        },
+        {
+          "type": "addFlag",
+          "flag": "merchant_open"
+        }
+      ],
+      "choices": [
+        {
+          "id": "C401_CHARM",
+          "text": "Build rapport to lower costs.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Charm",
+            "difficulty": 40,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "classIs",
+                  "classId": "SHADE"
+                },
+                "add": 10
+              },
+              {
+                "if": {
+                  "type": "hasFlag",
+                  "flag": "hub_gossip_good"
+                },
+                "add": 5
+              },
+              {
+                "if": {
+                  "type": "hasFlag",
+                  "flag": "hub_gossip_bad"
+                },
+                "add": 10
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Charm",
+                    "amount": 3
+                  },
+                  {
+                    "type": "setFlag",
+                    "flag": "hub_favor_note",
+                    "value": true
+                  },
+                  {
+                    "type": "setFlag",
+                    "flag": "hub_gossip_good",
+                    "value": true
+                  },
+                  {
+                    "type": "log",
+                    "text": "The merchant warms to you and offers a deal."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Charm",
+                    "amount": 1
+                  },
+                  {
+                    "type": "setFlag",
+                    "flag": "hub_gossip_good",
+                    "value": true
+                  },
+                  {
+                    "type": "log",
+                    "text": "The merchant gives a minor discount."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "setFlag",
+                    "flag": "hub_gossip_bad",
+                    "value": true
+                  },
+                  {
+                    "type": "log",
+                    "text": "The merchant raises prices but drops a rumor."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S005_TRAIN1",
+      "title": "Yard Drills",
+      "text": "The yard offers repetition, sweat, and small improvements that add up.",
+      "choices": [
+        {
+          "id": "C501_TRAIN_FORCE_MENTOR",
+          "text": "Drill under the guardâ€™s eye. (structured)",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "guard_open"
+            },
+            {
+              "type": "notFlag",
+              "flag": "train_yard_done1"
+            }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Force",
+            "difficulty": 45,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "classIs",
+                  "classId": "VANGUARD"
+                },
+                "add": 5
+              },
+              {
+                "if": {
+                  "type": "hasFlag",
+                  "flag": "hub_warded"
+                },
+                "add": 5
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Force",
+                    "amount": 2
+                  },
+                  {
+                    "type": "fatigue",
+                    "delta": 1
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "train_yard_done1"
+                  },
+                  {
+                    "type": "log",
+                    "text": "A small correction changes everything. Your stance feels steadier."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Force",
+                    "amount": 2
+                  },
+                  {
+                    "type": "fatigue",
+                    "delta": 2
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "train_yard_done1"
+                  },
+                  {
+                    "type": "log",
+                    "text": "You push too hard, then find the rhythm again."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Force",
+                    "amount": 1
+                  },
+                  {
+                    "type": "fatigue",
+                    "delta": 2
+                  },
+                  {
+                    "type": "modifyHealth",
+                    "amount": -1
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "train_yard_done1"
+                  },
+                  {
+                    "type": "log",
+                    "text": "A bad step bites back â€” but you learn exactly why it happened."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        },
+        {
+          "id": "C502_TRAIN_FORCE_SOLO",
+          "text": "Work the basics alone. (unstructured)",
+          "requires": [
+            {
+              "type": "notFlag",
+              "flag": "train_yard_done1"
+            }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Force",
+            "difficulty": 45,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "classIs",
+                  "classId": "VANGUARD"
+                },
+                "add": 5
+              },
+              {
+                "if": {
+                  "type": "hasFlag",
+                  "flag": "hub_warded"
+                },
+                "add": 5
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Force",
+                    "amount": 2
+                  },
+                  {
+                    "type": "fatigue",
+                    "delta": 2
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "train_yard_done1"
+                  },
+                  {
+                    "type": "log",
+                    "text": "You repeat the motion until it stops feeling like a guess."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Force",
+                    "amount": 1
+                  },
+                  {
+                    "type": "fatigue",
+                    "delta": 2
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "train_yard_done1"
+                  },
+                  {
+                    "type": "log",
+                    "text": "Progress comes in uneven steps â€” but it comes."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Force",
+                    "amount": 1
+                  },
+                  {
+                    "type": "fatigue",
+                    "delta": 3
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "train_yard_done1"
+                  },
+                  {
+                    "type": "log",
+                    "text": "You burn time chasing form, then stop before you build bad habits."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        },
+        {
+          "id": "C402_INSIGHT",
+          "text": "Spot angles and motives.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Insight",
+            "difficulty": 45,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "classIs",
+                  "classId": "ARCANIST"
+                },
+                "add": 10
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 3
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "merchant_truth_unlocked"
+                  },
+                  {
+                    "type": "log",
+                    "text": "You spot the merchant's angles and unlock truths about other NPCs."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Insight",
+                    "amount": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "You avoid a bad trade."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "log",
+                    "text": "The merchant spots your distrust and raises prices."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        },
+        {
+          "id": "C403_FORCE",
+          "text": "Impose your outcome.",
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Force",
+            "difficulty": 50,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "classIs",
+                  "classId": "VANGUARD"
+                },
+                "add": 10
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Force",
+                    "amount": 3
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "merchant_under_table_access"
+                  },
+                  {
+                    "type": "log",
+                    "text": "The merchant yields and offers under-table access."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Force",
+                    "amount": 1
+                  },
+                  {
+                    "type": "log",
+                    "text": "The merchant hesitates but still allows access."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "addFlag",
+                    "flag": "merchant_reputation_cost"
+                  },
+                  {
+                    "type": "log",
+                    "text": "The merchant blocks you but offers a backdoor deal anyway."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        },
+        {
+          "id": "C304_CASHFAVOR",
+          "text": "Ask the merchant to cash in a favor for you.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "hub_favor_note"
+            },
+            {
+              "type": "notFlag",
+              "flag": "hub_favor_spent"
+            }
+          ],
+          "effects": [
+            {
+              "type": "setFlag",
+              "flag": "hub_permit",
+              "value": true
+            },
+            {
+              "type": "setFlag",
+              "flag": "hub_watchlist",
+              "value": true
+            },
+            {
+              "type": "setFlag",
+              "flag": "hub_favor_spent",
+              "value": true
+            },
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            },
+            {
+              "type": "log",
+              "text": "Favors are the currency of the wise."
+            }
+          ],
+          "to": "chapter1_start"
+        },
+        {
+          "id": "C305_LEGIT_STOCK",
+          "text": "Browse the legitimate stock.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "guard_met"
+            }
+          ],
+          "effects": [
+            {
+              "type": "setFlag",
+              "flag": "hub_legit_stock",
+              "value": true
+            },
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            },
+            {
+              "type": "log",
+              "text": "You peruse the merchant's open wares."
+            }
+          ],
+          "to": "chapter1_start"
+        },
+        {
+          "id": "C306_QUIET_STOCK",
+          "text": "Inquire about the quiet stock.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "hub_watchlist"
+            }
+          ],
+          "effects": [
+            {
+              "type": "setFlag",
+              "flag": "hub_quiet_stock",
+              "value": true
+            },
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            },
+            {
+              "type": "log",
+              "text": "The merchant shows you the hidden goods."
+            }
+          ],
+          "to": "chapter1_start"
+        },
+        {
+          "id": "C307_PROTECTIVE_ODDMETS",
+          "text": "Browse protective oddments.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "hub_warded"
+            }
+          ],
+          "effects": [
+            {
+              "type": "setFlag",
+              "flag": "hub_protective_access",
+              "value": true
+            },
+            {
+              "type": "advanceTime",
+              "ticks": 1
+            },
+            {
+              "type": "log",
+              "text": "You find items to soften future risks."
+            }
+          ],
+          "to": "chapter1_start"
+        }
+      ]
+    },
+    {
+      "id": "S006_TRAIN2",
+      "title": "Sigil Practice",
+      "text": "Marks and meanings: you test what holds, and what slips.",
+      "choices": [
+        {
+          "id": "C601_TRAIN_WARDING_MENTOR",
+          "text": "Practice under the scholarâ€™s guidance. (precise)",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "scholar_open"
+            },
+            {
+              "type": "notFlag",
+              "flag": "train_sigil_done1"
+            }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Warding",
+            "difficulty": 45,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "classIs",
+                  "classId": "ARCANIST"
+                },
+                "add": 5
+              },
+              {
+                "if": {
+                  "type": "hasFlag",
+                  "flag": "hub_warded"
+                },
+                "add": 5
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Warding",
+                    "amount": 2
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "hub_warded"
+                  },
+                  {
+                    "type": "fatigue",
+                    "delta": 1
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "train_sigil_done1"
+                  },
+                  {
+                    "type": "log",
+                    "text": "Your lines settle. The air feels less eager to bite."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Warding",
+                    "amount": 2
+                  },
+                  {
+                    "type": "fatigue",
+                    "delta": 2
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "train_sigil_done1"
+                  },
+                  {
+                    "type": "log",
+                    "text": "The mark holdsâ€¦ mostly. You note where it thins."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Warding",
+                    "amount": 1
+                  },
+                  {
+                    "type": "fatigue",
+                    "delta": 2
+                  },
+                  {
+                    "type": "modifyHealth",
+                    "amount": -1
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "train_sigil_done1"
+                  },
+                  {
+                    "type": "log",
+                    "text": "A sting of feedback â€” not dangerous, but memorable."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        },
+        {
+          "id": "C602_TRAIN_WARDING_SOLO",
+          "text": "Attempt the marks from memory. (uncertain)",
+          "requires": [
+            {
+              "type": "notFlag",
+              "flag": "train_sigil_done1"
+            }
+          ],
+          "resolution": {
+            "type": "skillCheck",
+            "skill": "Warding",
+            "difficulty": 45,
+            "modifiers": [
+              {
+                "if": {
+                  "type": "classIs",
+                  "classId": "ARCANIST"
+                },
+                "add": 5
+              },
+              {
+                "if": {
+                  "type": "hasFlag",
+                  "flag": "hub_warded"
+                },
+                "add": 5
+              }
+            ],
+            "outcomes": {
+              "success": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Warding",
+                    "amount": 2
+                  },
+                  {
+                    "type": "fatigue",
+                    "delta": 2
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "train_sigil_done1"
+                  },
+                  {
+                    "type": "log",
+                    "text": "You find a pattern that works â€” even if you canâ€™t yet explain why."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "mixed": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Warding",
+                    "amount": 1
+                  },
+                  {
+                    "type": "fatigue",
+                    "delta": 2
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "train_sigil_done1"
+                  },
+                  {
+                    "type": "log",
+                    "text": "The lines blur. You stop before you train the wrong muscle."
+                  }
+                ],
+                "to": "chapter1_start"
+              },
+              "fail": {
+                "effects": [
+                  {
+                    "type": "practiceSkill",
+                    "skill": "Warding",
+                    "amount": 1
+                  },
+                  {
+                    "type": "fatigue",
+                    "delta": 3
+                  },
+                  {
+                    "type": "advanceTime",
+                    "ticks": 1
+                  },
+                  {
+                    "type": "addFlag",
+                    "flag": "train_sigil_done1"
+                  },
+                  {
+                    "type": "log",
+                    "text": "Nothing holds â€” but you learn what *not* to repeat."
+                  }
+                ],
+                "to": "chapter1_start"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S007_SHOP",
+      "title": "General Store",
+      "text": "The storekeeper offers various supplies.",
+      "choices": [
+        {
+          "id": "C701_REST",
+          "text": "Buy a restorative tonic.",
+          "effects": [
+            {
+              "type": "fatigue",
+              "delta": -2
+            },
+            {
+              "type": "log",
+              "text": "The tonic refreshes your weary body."
+            }
+          ],
+          "to": "chapter1_start"
+        }
+      ]
+    },
+    {
+      "id": "npc_guard_thread",
+      "title": "At the Gate",
+      "text": [
+        "A guard stands where the street narrows, watching the flow of feet and wagons.",
+        "Their gaze flicks to your hands, then your face—measured, not unkind."
+      ],
+      "choices": [
+        {
+          "text": "Offer a respectful greeting.",
+          "requires": [
+            {
+              "type": "notFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You keep it simple—tone steady, posture open.",
+                "The guard gives a short nod, filing you away as \"not a problem\" for now."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "GUARD_MET"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "SOCIAL",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "You made a clean first impression at the gate."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Offer a respectful greeting.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You keep it simple—tone steady, posture open.",
+                "The guard answers with a nod that's more procedure than warmth, eyes already moving past you."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "GUARD_MET"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "SOCIAL",
+                  "amount": 1
+                },
+                {
+                  "type": "advanceTime",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "Under tightened patrols, even pleasantries take time."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Ask what the guard is watching for.",
+          "requires": [
+            {
+              "type": "notFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You ask without leaning in, without making it personal.",
+                "The guard answers in generalities, but the edges soften: enough to be useful later."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "GUARD_GUARDED"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "INSIGHT",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "You learned the shape of the guard's concerns, if not the details."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Ask what the guard is watching for.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You ask without leaning in, without making it personal.",
+                "The guard answers in clipped fragments—enough to end the question, not enough to invite another."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "GUARD_GUARDED"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "INSIGHT",
+                  "amount": 1
+                },
+                {
+                  "type": "fatigue",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "Tightened patrols make questions feel like work—on both sides."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Try to lighten the mood with brief small talk.",
+          "requires": [
+            {
+              "type": "notFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You offer something harmless—weather, road dust, the day's pace.",
+                "A corner of the guard's mouth twitches. Not friendly, but less rigid than before."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "GUARD_OPEN"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "SOCIAL",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "You found a small crack in the guard's reserve."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Try to lighten the mood with brief small talk.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You offer something harmless—weather, road dust, the day's pace.",
+                "The guard doesn't take the bait. A second set of eyes turns your way, then moves on."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "GUARD_GUARDED"
+                },
+                {
+                  "type": "setFlag",
+                  "flag": "HUB_WATCHLIST"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "SOCIAL",
+                  "amount": 1
+                },
+                {
+                  "type": "advanceTime",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "Under tightened patrols, being memorable can cut both ways."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Step away without pressing your luck.",
+          "outcomes": [
+            {
+              "text": [
+                "You leave the guard to their work.",
+                "The street opens back into the hub's steady noise."
+              ],
+              "effects": [
+                {
+                  "type": "log",
+                  "message": "You chose discretion at the gate."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "npc_scholar_thread",
+      "title": "A Quiet Reader",
+      "text": [
+        "Near a sheltered wall, a scholar stands with a small stack of papers held down by a flat stone.",
+        "Their eyes move faster than their hands—careful not to tear the page in the wind."
+      ],
+      "choices": [
+        {
+          "text": "Introduce yourself and ask what they're studying.",
+          "requires": [
+            {
+              "type": "notFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You keep your voice low and your stance unthreatening.",
+                "The scholar answers without looking up at first—then finally meets your eyes, measuring, curious."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "SCHOLAR_MET"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "LORE",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "You met a scholar with a taste for careful details."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Introduce yourself and ask what they're studying.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You keep your voice low and your stance unthreatening.",
+                "The scholar glances past you twice before answering, words chosen as if someone might be listening."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "SCHOLAR_MET"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "LORE",
+                  "amount": 1
+                },
+                {
+                  "type": "advanceTime",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "With patrols tightened, even introductions move slower."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Ask for a small, practical tip about the roads beyond town.",
+          "requires": [
+            {
+              "type": "notFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You keep the question grounded—weather, footing, places to rest.",
+                "The scholar points with a fingertip, not a whole hand, tracing routes as if mapping them in the air."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "SCHOLAR_OPEN"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "INSIGHT",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "You picked up a few road-wise details from someone who reads the land like a page."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Ask for a small, practical tip about the roads beyond town.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You keep the question grounded—weather, footing, places to rest.",
+                "The scholar hesitates, then offers advice in half-sentences. Their eyes keep tracking movement at the edge of the square."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "SCHOLAR_OPEN"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "INSIGHT",
+                  "amount": 1
+                },
+                {
+                  "type": "fatigue",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "Under tighter patrols, getting answers takes more care—and more effort."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Offer to steady their papers from the wind.",
+          "requires": [
+            {
+              "type": "notFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You hold the stack in place with two fingers, careful not to smudge ink.",
+                "The scholar's shoulders ease. A quiet trust settles between you, thin but real."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "SCHOLAR_IMPRESSED"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "FOCUS",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "A small, practical kindness earned you regard."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Offer to steady their papers from the wind.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You hold the stack in place with two fingers, careful not to smudge ink.",
+                "A passing patrol slows. The scholar freezes until the footsteps move on—then exhales like they've been holding their breath for minutes."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "SCHOLAR_IMPRESSED"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "FOCUS",
+                  "amount": 1
+                },
+                {
+                  "type": "advanceTime",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "Tightened patrols turn small moments into long ones."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Excuse yourself and leave them to their work.",
+          "outcomes": [
+            {
+              "text": [
+                "You step away without forcing conversation.",
+                "The scholar returns to the page as if it never stopped moving."
+              ],
+              "effects": [
+                {
+                  "type": "log",
+                  "message": "You left the scholar undisturbed."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "npc_merchant_thread",
+      "title": "A Street Seller",
+      "text": [
+        "A small stall leans into the foot traffic—clean jars, folded cloth, a ledger weighted by a stone.",
+        "The merchant watches faces the way others watch coin."
+      ],
+      "choices": [
+        {
+          "text": "Browse quietly and note what draws attention.",
+          "requires": [
+            {
+              "type": "notFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You drift past the goods without grabbing or gawking.",
+                "A pattern emerges—what sells fast, what sits untouched, who lingers too long."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "MERCHANT_MET"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "OBSERVATION",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "You got a feel for the stall without making a scene."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Browse quietly and note what draws attention.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You drift past the goods without grabbing or gawking.",
+                "The merchant keeps glancing over your shoulder, measuring you against the patrol's rhythm."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "MERCHANT_MET"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "OBSERVATION",
+                  "amount": 1
+                },
+                {
+                  "type": "advanceTime",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "Tightened patrols add friction to every moment in the market."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Ask if the merchant has heard anything worth knowing.",
+          "requires": [
+            {
+              "type": "notFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You ask casually, like you're browsing words as much as wares.",
+                "The merchant answers in hints—enough to point you toward the right corners of town."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "MERCHANT_OPEN"
+                },
+                {
+                  "type": "setFlag",
+                  "flag": "HUB_GOSSIP_GOOD"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "SOCIAL",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "A few careful questions bought you useful direction."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Ask if the merchant has heard anything worth knowing.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You ask casually, like you're browsing words as much as wares.",
+                "The merchant's eyes dart to the street. The answer comes slower, wrapped in caution."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "MERCHANT_OPEN"
+                },
+                {
+                  "type": "setFlag",
+                  "flag": "HUB_GOSSIP_GOOD"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "SOCIAL",
+                  "amount": 1
+                },
+                {
+                  "type": "fatigue",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "In tightened patrols, information costs more than coin."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Press for a better deal with steady confidence.",
+          "requires": [
+            {
+              "type": "notFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You don't haggle loudly—you frame it as fairness, not need.",
+                "The merchant exhales, then slides the price a notch. A small favor, noted."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "HUB_FAVOR_NOTE"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "BARGAIN",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "You earned a modest favor from the merchant."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Press for a better deal with steady confidence.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You don't haggle loudly—you frame it as fairness, not need.",
+                "The merchant's patience thins under passing eyes. You get less than you wanted, and it takes longer."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "HUB_GOSSIP_BAD"
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "BARGAIN",
+                  "amount": 1
+                },
+                {
+                  "type": "advanceTime",
+                  "amount": 1
+                },
+                {
+                  "type": "fatigue",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "Tightened patrols make hard bargaining feel like trouble waiting to happen."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Thank the merchant and move on.",
+          "outcomes": [
+            {
+              "text": [
+                "You give a brief nod and step back into the flow of the hub.",
+                "Voices and footsteps swallow the stall behind you."
+              ],
+              "effects": [
+                {
+                  "type": "log",
+                  "message": "You left the stall without drawing attention."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hub_release_valve",
+      "title": "A Quiet Rinse",
+      "text": [
+        "Behind a row of stalls, a narrow doorway leads to a small washroom—basins, rough towels, and a single bench.",
+        "It smells of soap and old steam. The kind of place people use when they don't want questions."
+      ],
+      "choices": [
+        {
+          "text": "Rinse, change your look, and leave no trail to follow.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "WILD_OB1_TRAIL_HEAT"
+            },
+            {
+              "type": "notFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You scrub dust and sweat from skin and cloth, then step out with your posture reset.",
+                "Whatever was clinging to you feels less certain now—harder to read at a glance."
+              ],
+              "effects": [
+                {
+                  "type": "removeFlag",
+                  "flag": "WILD_OB1_TRAIL_HEAT"
+                },
+                {
+                  "type": "advanceTime",
+                  "amount": 1
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "FOCUS",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "You took time to reduce the attention your trail might draw."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Rinse, change your look, and leave no trail to follow.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "WILD_OB1_TRAIL_HEAT"
+            },
+            {
+              "type": "hasFlag",
+              "flag": "HUB_PATROLS_TIGHTENED"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "You scrub dust and sweat from skin and cloth, then step out with your posture reset.",
+                "Outside, footsteps pass twice before you move. Today, privacy takes patience."
+              ],
+              "effects": [
+                {
+                  "type": "removeFlag",
+                  "flag": "WILD_OB1_TRAIL_HEAT"
+                },
+                {
+                  "type": "advanceTime",
+                  "amount": 1
+                },
+                {
+                  "type": "fatigue",
+                  "amount": 1
+                },
+                {
+                  "type": "practiceSkill",
+                  "skill": "FOCUS",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "You shed your heat, but tightened patrols made it cost more."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Call in a quiet favor to smooth the way out.",
+          "requires": [
+            {
+              "type": "hasFlag",
+              "flag": "HUB_FAVOR_NOTE"
+            },
+            {
+              "type": "notFlag",
+              "flag": "HUB_FAVOR_SPENT"
+            },
+            {
+              "type": "hasFlag",
+              "flag": "HUB_WATCHLIST"
+            }
+          ],
+          "outcomes": [
+            {
+              "text": [
+                "A few words pass through the right mouth at the right time.",
+                "Nothing official changes, but the air around you loosens—like someone decided you're not worth the pause."
+              ],
+              "effects": [
+                {
+                  "type": "setFlag",
+                  "flag": "HUB_FAVOR_SPENT"
+                },
+                {
+                  "type": "removeFlag",
+                  "flag": "HUB_WATCHLIST"
+                },
+                {
+                  "type": "setFlag",
+                  "flag": "HUB_GUARD_SOFTENED"
+                },
+                {
+                  "type": "advanceTime",
+                  "amount": 1
+                },
+                {
+                  "type": "log",
+                  "message": "You spent a favor to reduce scrutiny—quietly and without a scene."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        },
+        {
+          "text": "Keep your head down and leave as you came.",
+          "outcomes": [
+            {
+              "text": [
+                "You don't linger. Some days, the safest choice is to stay unremarkable.",
+                "The hub swallows you back into its noise."
+              ],
+              "effects": [
+                {
+                  "type": "log",
+                  "message": "You chose not to spend time or favors here."
+                }
+              ],
+              "to": "hub_square_return_router"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import Foundation
 
 struct GameState: Codable {
+    var packId: String
     var currentSceneId: String
     var heroClassId: String
 
